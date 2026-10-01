@@ -87,6 +87,22 @@
   .recibo-det b{text-align:right}
   .aviso-proto{background:#FFF4D6;border:1px solid #E5C877;color:#7a5a00;border-radius:12px;padding:12px 15px;font-size:14px;text-align:center}  .erro-msg{color:var(--erro);font-size:15.5px;font-weight:600;display:none}
   footer{padding:0 20px 18px;text-align:center;font-size:12.5px;color:var(--sutil)}
+  select{width:100%;padding:15px 14px;font:inherit;font-size:17px;border:1.5px solid var(--fio);border-radius:12px;background:var(--branco);color:var(--ink)}
+  .btn-gal{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border:1.5px dashed #A6B3BA;border-radius:12px;background:var(--branco);color:var(--muted);font:600 16.5px var(--texto);cursor:pointer}
+  .btn-gal:active{background:var(--papel)}
+  .bloco-local{background:#FFF7EA;border:1.5px solid #E7B566;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:13px}
+  .bloco-local h3{margin:0;font:800 20px/1.2 var(--display);color:#8A4B06}
+  .bloco-local .ajuda{font-size:14.5px}
+  .loc-res{background:var(--branco);border:1.5px solid var(--acento);border-radius:14px;padding:14px 15px;font-size:15.5px;line-height:1.5;color:var(--ink)}
+  .loc-res div,.loc-res button{margin-top:10px}
+  .loc-res.ok{border-color:#9FD0AA;background:#EEF8F0}
+  .loc-res.alerta{border-color:#E5C877;background:#FFF4D6}
+  .loc-res .btn{padding:14px;font-size:17.5px}
+  .loc-aviso{font-size:14px;color:#7a5a00}
+  .loc-opcao{display:block;width:100%;text-align:left;padding:13px 14px;border:1.5px solid var(--fio);border-radius:12px;background:var(--branco);font:inherit;font-size:15.5px;color:var(--ink);cursor:pointer}
+  .loc-opcao:active{border-color:var(--acento)}
+  .btn-ok{background:var(--ok)}
+  .foto-slot .selo.gal{background:rgba(138,75,6,.9)}
   .oculta{display:none!important}
 </style>
 </head>
@@ -124,15 +140,37 @@
 <!-- TELA 2: foto e local -->
 <main id="t2" class="oculta">
   <h2>Agora, uma foto e o lugar <span class="junto">certinho 📸</span></h2>
-  <p class="ajuda">Pode tirar até 2 fotos, elas já saem com data, hora e endereço. Confere se o pino está bem em cima da ocorrência: se o GPS errar por alguns metros, ajusta com cuidado.</p>
+  <p class="ajuda">Tira até 2 fotos na hora (já saem com data, hora e endereço) ou escolhe da galeria. Confere se o pino está bem em cima da ocorrência: se o GPS errar por alguns metros, ajusta com cuidado.</p>
   <div class="fotos">
     <div class="foto-slot" id="slot0" role="button" tabindex="0" onclick="abrirCamera(0)"><span class="cam">📷</span><span>Tirar a foto</span></div>
     <div class="foto-slot" id="slot1" role="button" tabindex="0" onclick="abrirCamera(1)"><span class="cam">📷</span><span>Mais uma foto<br>(se quiser)</span></div>
   </div>
   <input type="file" id="cam" accept="image/*" capture="environment" class="oculta">
+  <input type="file" id="gal" accept="image/*" multiple class="oculta">
+  <button class="btn-gal" id="btnGaleria" type="button" onclick="abrirGaleria()">🖼️ Escolher da galeria <span style="font-weight:400">(até 2 fotos)</span></button>
+  <div class="erro-msg" id="erroFoto"></div>
+  <div class="bloco-local oculta" id="blocoLocal">
+    <h3>Onde foi <span class="junto">isso? 📍</span></h3>
+    <p class="ajuda">Como a foto veio da galeria, conta pra gente o lugar. A equipe usa o endereço e a referência para chegar certinho.</p>
+    <div>
+      <label for="locRua">Rua e número</label>
+      <input type="text" id="locRua" maxlength="100" placeholder="Ex.: Rua Maria Carlota, 250" autocomplete="off" enterkeyhint="search">
+    </div>
+    <div>
+      <label for="locCidade">Cidade</label>
+      <select id="locCidade"></select>
+    </div>
+    <div>
+      <label for="locRef">Ponto de referência</label>
+      <input type="text" id="locRef" maxlength="80" placeholder="Ex.: em frente ao Posto BR" autocomplete="off">
+    </div>
+    <button class="btn" type="button" id="btnBuscar" onclick="buscarEndereco()">🔎 Buscar no mapa</button>
+    <button class="btn-gps" type="button" id="btnAqui" onclick="estouNoLocal()">📍 Estou no local agora</button>
+  </div>
   <div id="mapa"></div>
-  <button class="btn-gps" onclick="pedirGps(false)">📍 Usar minha localização</button>
-  <div class="endereco"><span class="pin">📍</span><span id="endTxt">Estamos te procurando no mapa…</span></div>
+  <button class="btn-gps" id="btnGpsMapa" onclick="pedirGps(false)">📍 Usar minha localização</button>
+  <div class="endereco" id="boxEnd"><span class="pin">📍</span><span id="endTxt">Estamos te procurando no mapa…</span></div>
+  <div class="loc-res oculta" id="locRes"></div>
   <div class="erro-msg" id="foraPiloto">🧭 Este ponto está fora da área do piloto (UN Leste). Confere se o pino está no lugar certo.</div>
   <div class="destino fora" id="avisoDist" style="display:none">📏 <span></span></div>
   <div id="diag" style="display:none;font-size:11.5px;color:var(--sutil);margin-top:-8px;padding-left:4px"></div>
@@ -182,7 +220,7 @@
     <button class="btn" onclick="reiniciar()">Registrar outra ocorrência</button>
   </div>
 </main>
-<footer>Eu vi um Vazamento · uso interno Sabesp<br>versão 2.4 · 26/09/2026</footer>
+<footer>Eu vi um Vazamento · uso interno Sabesp<br>versão 2.5 · 30/09/2026</footer>
 <div id="visor" class="oculta" onclick="this.classList.add('oculta')">
   <img alt="foto ampliada">
   <div class="dica">A data, a hora e a posição ficam gravadas na parte de baixo da foto</div>
@@ -213,7 +251,8 @@ function poloDoPonto(lat,lon){
 /* Envio real: fluxo Power Automate. Os destinatarios sao definidos DENTRO do fluxo (nunca pelo app). */
 const FLUXO_URL='https://default5f9d74c8ec924488a2c7bdce634262.fa.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/24/workflows/64ae8af3f7214f36a17cb0c5fc4d6494/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=UBfzHK_KwFSebzYuN2cPJVDU_jO8b03SfxDlmhkpU0w';
 const TIPOS={'água':{recibo:'💧 Vazamento de água',email:'Vazamento de água'},'esgoto':{recibo:'🟤 Esgoto na rua',email:'Esgoto na rua'},'vala':{recibo:'🚧 Vala',email:'Vala'},'pv':{recibo:'⚠️ PV com tampa exposta',email:'PV - tampa exposta ou desnivelada'}};
-const est={tipo:null,fotos:[null,null],lat:-23.55,lon:-46.63,gpsOk:false,endereco:'',un:null,polo:null,slot:0,gpsPedido:false,protoAtual:null,gpsLat:null,gpsLon:null,ruaGps:null,fixManual:false,foraConfirmado:false,longeConfirmado:false,geoSeq:0,refinando:false,bairroFonte:''};
+const est={tipo:null,fotos:[null,null],lat:-23.55,lon:-46.63,gpsOk:false,endereco:'',un:null,polo:null,slot:0,gpsPedido:false,protoAtual:null,gpsLat:null,gpsLon:null,ruaGps:null,fixManual:false,foraConfirmado:false,longeConfirmado:false,geoSeq:0,refinando:false,bairroFonte:'',carimbando:false,ocupadoAte:0,
+  gal:{ativo:false,cand:null,conf:null,naoAchou:false,buscou:false,aqui:false,opcoes:null,seq:0}};
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function irPara(n){
   for(let i=1;i<=4;i++)document.getElementById('t'+i).classList.toggle('oculta',i!==n);
@@ -232,8 +271,8 @@ function escolher(tipo){
 const mapa=L.map('mapa',{zoomControl:false}).setView([est.lat,est.lon],17);
 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Mapa © Esri | Endereços © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(mapa);
 const pino=L.marker([est.lat,est.lon],{draggable:true}).addTo(mapa);
-pino.on('dragend',()=>{const p=pino.getLatLng();fixaLocal(p.lat,p.lng,true);});
-mapa.on('click',e=>{pino.setLatLng(e.latlng);fixaLocal(e.latlng.lat,e.latlng.lng,true);});
+pino.on('dragend',()=>{const p=pino.getLatLng();fixaLocal(p.lat,p.lng,true);pinoManualGaleria();});
+mapa.on('click',e=>{pino.setLatLng(e.latlng);fixaLocal(e.latlng.lat,e.latlng.lng,true);pinoManualGaleria();});
 let geoTimer=null;
 function fixaLocal(lat,lon,manual){
   est.fixManual=!!manual;
@@ -335,7 +374,8 @@ async function refinaBairro(lat,lon,a,seq){
   return vivo()&&r&&r.bairro?r.bairro:null;
 }
 function atualizaEndereco(msg){
-  const un=(est.polo?' <span class="chip-un">Polo '+est.polo.nome+'</span>':'')+(est.un?' <span class="chip-un">região '+est.un.nome+'</span>':'');
+  const chips=!est.gal.ativo||!!(est.gal.cand||est.gal.conf);
+  const un=!chips?'':(est.polo?' <span class="chip-un">Polo '+est.polo.nome+'</span>':'')+(est.un?' <span class="chip-un">região '+est.un.nome+'</span>':'');
   document.getElementById('endTxt').innerHTML=(msg?msg:(est.endereco?'<b>'+esc(est.endereco)+'</b>':'Arraste o pino até o ponto do vazamento'))+un;
 }
 async function geoReversa(lat,lon){
@@ -381,13 +421,16 @@ function pedirGps(automatico){
   diag('pedindo');
   const achou=p=>{
     diagErro='nenhum';diag('achou');
+    est.gpsLat=p.coords.latitude;est.gpsLon=p.coords.longitude;
+    if(est.gal.ativo&&!est.gal.aqui){atualizaForaAviso();return;}
     pino.setLatLng([p.coords.latitude,p.coords.longitude]);
     mapa.setView([p.coords.latitude,p.coords.longitude],18);
-    est.gpsLat=p.coords.latitude;est.gpsLon=p.coords.longitude;
     fixaLocal(p.coords.latitude,p.coords.longitude,false);
+    if(est.gal.ativo)gpsNaGaleria(p.coords.latitude,p.coords.longitude);
   };
   const falhou=err=>{
     const code=err&&err.code;
+    if(est.gal.aqui){est.gal.aqui=false;mostraRes('O GPS não respondeu 😕 Digita o endereço e toca em <b>Buscar no mapa</b>.','alerta');}
     diagErro=code===1?'1 (bloqueado)':code===2?'2 (sem sinal)':code===3?'3 (tempo)':'?';diag('falhou');
     if(!window.isSecureContext){
       atualizaEndereco('Nesta versão de teste o GPS fica de fora (ele só liga quando o app estiver publicado na internet). Toca no mapa e arrasta o pino, funciona igualzinho 😉');
@@ -408,13 +451,15 @@ function pedirGps(automatico){
   },{enableHighAccuracy:true,timeout:8000,maximumAge:0});
 }
 /* fotos com carimbo */
-function verFoto(url){
+function verFoto(url,origem){
   const v=document.getElementById('visor');
   v.querySelector('img').src=url;
+  v.querySelector('.dica').textContent=origem==='galeria'?'Foto da galeria: o carimbo com o local informado entra quando você toca em Continuar':'A data, a hora e a posição ficam gravadas na parte de baixo da foto';
   v.classList.remove('oculta');
 }
 function abrirCamera(slot){
-  if(est.fotos[slot]){verFoto(est.fotos[slot].url);return;}
+  if(est.fotos[slot]){verFoto(est.fotos[slot].url,est.fotos[slot].origem);return;}
+  if(Date.now()<est.ocupadoAte){avisoOcupado();return;}
   est.slot=slot;
   document.getElementById('cam').click();
 }
@@ -422,11 +467,12 @@ document.getElementById('cam').addEventListener('change',e=>{
   const f=e.target.files[0];
   e.target.value='';
   if(!f)return;
+  est.ocupadoAte=Date.now()+9000;
   const slotFoto=est.slot,quandoFoto=new Date();
   const img=new Image();
   img.onload=async()=>{
     // carimba so depois que o local estiver confirmado (espera invisivel, no maximo ~5 s)
-    for(let i=0;i<25&&(est.refinando||!est.gpsOk);i++){
+    for(let i=0;i<25&&(est.refinando||!est.gpsOk)&&!est.gal.ativo;i++){
       if(i===2)document.getElementById('slot'+slotFoto).innerHTML='<span class="cam">⏳</span><span>Registrando local…</span>';
       await esperaMs(200);
     }
@@ -441,8 +487,8 @@ document.getElementById('cam').addEventListener('change',e=>{
     g.font='700 '+fh+'px system-ui,sans-serif';
     const linhas=[agora.toLocaleDateString('pt-BR')+'  '+agora.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})];
     if(est.gpsLat!=null)linhas.push('GPS '+est.gpsLat.toFixed(5)+', '+est.gpsLon.toFixed(5));
-    else if(est.gpsOk)linhas.push('Local marcado '+est.lat.toFixed(5)+', '+est.lon.toFixed(5));
-    if(est.endereco){
+    else if(est.gpsOk&&!est.gal.ativo)linhas.push('Local marcado '+est.lat.toFixed(5)+', '+est.lon.toFixed(5));
+    if(est.endereco&&!est.gal.ativo){
       let end=est.endereco;
       const maxw=c.width-fh*1.2;
       while(end.length>8&&g.measureText(end+'…').width>maxw)end=end.slice(0,-2);
@@ -456,12 +502,14 @@ document.getElementById('cam').addEventListener('change',e=>{
     g.font='700 '+fh+'px system-ui,sans-serif';
     linhas.forEach((l,i)=>g.fillText(l,fh*0.6,c.height-barra+fh*(i+1.15)));
     const url=c.toDataURL('image/jpeg',0.82);
-    est.fotos[slotFoto]={url,quando:agora};
-    document.getElementById('erro2').style.display='none';
+    est.fotos[slotFoto]={url,quando:agora,origem:'camera'};
+    document.getElementById('erro2').style.display='none';document.getElementById('erroFoto').style.display='none';
     const slotEl=document.getElementById('slot'+slotFoto);
     slotEl.innerHTML='<img src="'+url+'" alt="foto do vazamento"><span class="selo">🕒 com data e hora</span><button class="rm" onclick="event.stopPropagation();removeFoto('+slotFoto+')">✕</button>';
     URL.revokeObjectURL(img.src);
+    est.ocupadoAte=0;
   };
+  img.onerror=()=>{URL.revokeObjectURL(img.src);est.ocupadoAte=0;fotoIlegivel();};
   img.src=URL.createObjectURL(f);
 });
 document.querySelectorAll('.foto-slot').forEach(el=>el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}}));
@@ -469,15 +517,453 @@ function removeFoto(slot){
   est.fotos[slot]=null;
   const s=document.getElementById('slot'+slot);
   s.innerHTML='<span class="cam">📷</span><span>'+(slot===0?'Tirar a foto':'Mais uma foto<br>(se quiser)')+'</span>';
+  atualizaModoGaleria();
+}
+/* v2.5: foto da galeria. O local é INFORMADO pela pessoa (rua, número, cidade, referência) e confirmado no mapa. */
+const CIDADES={'São Paulo':[-23.54,-46.47],'Arujá':[-23.3964,-46.3211],'Biritiba Mirim':[-23.5725,-46.0386],'Ferraz de Vasconcelos':[-23.5411,-46.3689],'Guararema':[-23.4112,-46.0369],'Itaquaquecetuba':[-23.4864,-46.3486],'Mogi das Cruzes':[-23.5229,-46.1884],'Poá':[-23.5286,-46.3447],'Salesópolis':[-23.5317,-45.8464],'Santa Isabel':[-23.3156,-46.2233],'Suzano':[-23.5428,-46.3108]};
+document.getElementById('locCidade').innerHTML=Object.keys(CIDADES).map(c=>'<option>'+c+'</option>').join('');
+const ERRO_LOC_PADRAO=document.getElementById('erro2loc').innerHTML;
+const FONTES={numero:'número encontrado no mapa',cep:'trecho da rua pela faixa de CEP dos Correios','bairro-rua':'trecho da rua pelo bairro dos Correios',rua:'rua encontrada no mapa',opcao:'rua escolhida entre ruas de mesmo nome',bairro:'rua fora do mapa, ponto no bairro (aproximado)',gps:'GPS do aparelho no local',pino:'ponto marcado no mapa',foto:'localização gravada na foto'};
+const letras=s=>String(s||'').replace(/[^A-Za-zÀ-ÿ]/g,'').length;
+function dataDaFoto(f){return f.dataFoto?(f.dataTipo==='arquivo'?'data do arquivo ':'tirada em ')+fmtData(f.dataFoto):'data não informada';}
+function fmtData(d){return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+function modoGaleria(){return est.fotos.some(f=>f&&f.origem==='galeria');}
+function aConfirmar(){return est.gal.ativo&&!est.gal.conf;}
+function rolaAte(id,onde){setTimeout(()=>{const e=document.getElementById(id);if(e)e.scrollIntoView({behavior:'smooth',block:onde||'center'});},150);}
+function mostraRes(html,tipo){
+  const r=document.getElementById('locRes');
+  r.className='loc-res'+(tipo?' '+tipo:'')+(html?'':' oculta');
+  r.innerHTML=html||'';
+  atualizaMapaGaleria();
+}
+function atualizaMapaGaleria(){
+  const ver=!est.gal.ativo||!!(est.gal.cand||est.gal.conf||est.gal.naoAchou||est.gal.opcoes),m=document.getElementById('mapa');
+  const antes=!m.classList.contains('oculta');
+  m.classList.toggle('oculta',!ver);document.getElementById('boxEnd').classList.toggle('oculta',!ver);
+  if(ver&&!antes)setTimeout(()=>{mapa.invalidateSize();mapa.setView([est.lat,est.lon],mapa.getZoom());},60);
+}
+function botoesConfirma(){return '<button class="btn btn-ok" type="button" onclick="confirmaLocal()">✅ Sim, é aqui</button><button class="btn fantasma" type="button" onclick="naoEAqui()">Não é aqui</button>';}
+function cancelaPendentes(){est.gal.aqui=false;est.gal.seq++;const b=document.getElementById('btnBuscar');b.disabled=false;b.textContent='🔎 Buscar no mapa';}
+function limpaGaleria(){
+  est.gal.seq++;est.gal.cand=null;est.gal.conf=null;est.gal.naoAchou=false;est.gal.buscou=false;est.gal.aqui=false;est.gal.opcoes=null;
+  const b=document.getElementById('btnBuscar');b.disabled=false;b.textContent='🔎 Buscar no mapa';
+}
+function atualizaModoGaleria(){
+  const on=modoGaleria(),era=est.gal.ativo;
+  est.gal.ativo=on;
+  document.getElementById('blocoLocal').classList.toggle('oculta',!on);
+  document.getElementById('btnGpsMapa').classList.toggle('oculta',on);
+  if(on===era)return;
+  const confAntes=est.gal.conf;
+  limpaGaleria();mostraRes('');
+  document.getElementById('erro2loc').style.display='none';
+  if(on){
+    est.geoSeq++;est.refinando=false;clearTimeout(geoTimer);
+    atualizaEndereco('Digita o endereço acima e toca em <b>Buscar no mapa</b> 🔎');
+    rolaAte('blocoLocal','start');
+  }else if(est.gpsLat!=null){
+    pino.setLatLng([est.gpsLat,est.gpsLon]);mapa.setView([est.gpsLat,est.gpsLon],18);fixaLocal(est.gpsLat,est.gpsLon,false);
+  }else if(confAntes){
+    fixaLocal(confAntes.lat,confAntes.lon,true);
+  }else{
+    est.gpsOk=false;est.polo=null;est.un=null;est.endereco='';atualizaEndereco();
+  }
+  atualizaForaAviso();
+}
+/* galeria: até 2 fotos, lê data (e GPS, se vier) sem nunca travar */
+function abrirGaleria(){
+  const e=document.getElementById('erroFoto');e.style.display='none';
+  if(est.fotos[0]&&est.fotos[1]){e.textContent='Já tem 2 fotos 📷 Toca no ✕ de uma delas para trocar.';e.style.display='block';return;}
+  if(Date.now()<est.ocupadoAte){avisoOcupado();return;}
+  document.getElementById('gal').click();
+}
+function avisoOcupado(){const e=document.getElementById('erroFoto');e.textContent='Só um instante, ainda estamos carregando a foto anterior ⏳';e.style.display='block';}
+function fotoIlegivel(){
+  const e=document.getElementById('erroFoto');
+  e.textContent='Não conseguimos abrir essa foto 😕 Alguns formatos (como HEIC) não abrem no navegador. Tenta outra foto, ou tira um print dela e escolhe o print.';
+  e.style.display='block';
+}
+function abreImagem(src){
+  return new Promise((ok,falha)=>{
+    const img=new Image(),url=typeof src==='string'?src:URL.createObjectURL(src);
+    img.onload=()=>{if(typeof src!=='string')URL.revokeObjectURL(url);ok(img);};
+    img.onerror=()=>{if(typeof src!=='string')URL.revokeObjectURL(url);falha(new Error('imagem'));};
+    img.src=url;
+  });
+}
+document.getElementById('gal').addEventListener('change',async e=>{
+  const arqs=[...e.target.files];e.target.value='';
+  if(!arqs.length)return;
+  const erro=document.getElementById('erroFoto');erro.style.display='none';
+  const livres=[0,1].filter(i=>!est.fotos[i]);
+  est.ocupadoAte=Date.now()+15000;
+  try{for(let k=0;k<Math.min(arqs.length,livres.length);k++)await recebeGaleria(arqs[k],livres[k]);}finally{est.ocupadoAte=0;}
+  if(arqs.length>livres.length&&erro.style.display!=='block'){erro.textContent='Só cabem 2 fotos, ficamos com '+(livres.length===1?'a primeira':'as 2 primeiras')+' 😉';erro.style.display='block';}
+});
+async function recebeGaleria(f,slot){
+  let meta={data:null,tipoData:null,lat:null,lon:null};
+  try{meta=await lerExif(f);}catch(x){}
+  let img;
+  try{img=await abreImagem(f);}catch(x){fotoIlegivel();return;}
+  const k=Math.min(1,1280/Math.max(img.width,img.height));
+  const c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
+  c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+  const orig=c.toDataURL('image/jpeg',0.85);
+  est.fotos[slot]={url:orig,orig:orig,quando:new Date(),origem:'galeria',dataFoto:meta.data,dataTipo:meta.tipoData};
+  document.getElementById('erro2').style.display='none';
+  mostraSlot(slot);
+  atualizaModoGaleria();
+  if(meta.lat!=null&&!est.gal.conf&&!est.gal.cand)propoeFotoGps(meta.lat,meta.lon);
+}
+function mostraSlot(slot){
+  const f=est.fotos[slot];if(!f)return;
+  const selo=f.origem==='galeria'?'<span class="selo gal">🖼️ da galeria</span>':'<span class="selo">🕒 com data e hora</span>';
+  document.getElementById('slot'+slot).innerHTML='<img src="'+f.url+'" alt="foto da ocorrência">'+selo+'<button class="rm" onclick="event.stopPropagation();removeFoto('+slot+')">✕</button>';
+}
+async function lerExif(f){
+  const r={data:null,tipoData:null,lat:null,lon:null};
+  const v=new DataView(await f.slice(0,262144).arrayBuffer());
+  if(v.byteLength<4||v.getUint16(0)!==0xFFD8)return r;
+  let p=2;
+  while(p+4<=v.byteLength){
+    const m=v.getUint16(p);
+    if((m&0xFF00)!==0xFF00||m===0xFFDA)break;
+    if(m===0xFFE1&&p+10<=v.byteLength&&v.getUint32(p+4)===0x45786966){try{exifTiff(v,p+10,r);}catch(x){}break;}
+    p+=2+v.getUint16(p+2);
+  }
+  return r;
+}
+function exifTiff(v,t,r){
+  const le=v.getUint16(t)===0x4949,u16=o=>v.getUint16(o,le),u32=o=>v.getUint32(o,le);
+  const ifd=o=>{const tg={},n=u16(t+o);for(let i=0;i<n;i++){const e=t+o+2+i*12;tg[u16(e)]={q:u32(e+4),v:e+8};}return tg;};
+  const txt=x=>{const o=x.q>4?t+u32(x.v):x.v;let s='';for(let i=0;i<x.q&&o+i<v.byteLength;i++){const c=v.getUint8(o+i);if(!c)break;s+=String.fromCharCode(c);}return s;};
+  const graus=x=>{const o=t+u32(x.v);let g=0;for(let i=0;i<3;i++){const d=u32(o+i*8+4);if(d)g+=u32(o+i*8)/d/Math.pow(60,i);}return g;};
+  const i0=ifd(u32(t+4));
+  let dt='',tipo='tirada';
+  try{if(i0[0x8769]){const ex=ifd(u32(i0[0x8769].v));if(ex[0x9003])dt=txt(ex[0x9003]);}}catch(x){}
+  if(!dt&&i0[0x0132]){dt=txt(i0[0x0132]);tipo='arquivo';}
+  const m=/^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2})/.exec(dt);
+  if(m){const d=new Date(+m[1],+m[2]-1,+m[3],+m[4],+m[5]);if(+m[1]>=2000&&!isNaN(d)&&d.getTime()<=Date.now()+864e5){r.data=d;r.tipoData=tipo;}}
+  if(i0[0x8825]){
+    const g=ifd(u32(i0[0x8825].v));
+    if(g[2]&&g[4]){
+      let la=graus(g[2]),lo=graus(g[4]);
+      if(g[1]&&txt(g[1])==='S')la=-la;
+      if(g[3]&&txt(g[3])==='W')lo=-lo;
+      if(la<-19&&la>-26&&lo<-43&&lo>-54){r.lat=la;r.lon=lo;}
+    }
+  }
+}
+/* propostas de local: sempre pedem confirmação ("Sim, é aqui") */
+function propoeFotoGps(lat,lon){
+  cancelaPendentes();
+  pino.setLatLng([lat,lon]);mapa.setView([lat,lon],18);
+  fixaLocal(lat,lon,true);
+  est.gal.cand={lat,lon,fonte:'foto'};est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;
+  atualizaForaAviso();
+  mostraRes('📷 A foto trouxe a localização de onde foi tirada. <b>O problema é neste ponto?</b> Confere no mapa.'+botoesConfirma());
+  rolaAte('mapa','start');
+}
+function estouNoLocal(){
+  est.gal.aqui=true;
+  mostraRes('Ligando o GPS… pode levar alguns segundos 📡');
+  pedirGps(false);
+}
+function gpsNaGaleria(lat,lon){
+  cancelaPendentes();
+  est.gal.cand={lat,lon,fonte:'gps'};est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;
+  atualizaForaAviso();
+  mostraRes('📍 Achamos você aqui. <b>O problema é neste ponto?</b> Confere no mapa.'+botoesConfirma());
+  rolaAte('mapa','start');
+}
+function pinoManualGaleria(){
+  if(!est.gal.ativo)return;
+  cancelaPendentes();
+  est.gal.cand={lat:est.lat,lon:est.lon,fonte:'pino'};est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;
+  atualizaForaAviso();
+  mostraRes('📍 Você marcou este ponto no mapa. <b>O problema é aqui?</b>'+botoesConfirma());
+}
+function textoCand(c){return [c.rua+(c.num!=null?', '+c.num:''),c.bairro,c.cidade].filter(Boolean).join(', ');}
+function propoe(c){
+  cancelaPendentes();
+  est.gal.cand=c;est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;
+  est.geoSeq++;est.refinando=false;clearTimeout(geoTimer);
+  pino.setLatLng([c.lat,c.lon]);mapa.setView([c.lat,c.lon],c.fonte==='bairro'?15:17);
+  est.lat=c.lat;est.lon=c.lon;est.gpsOk=true;est.fixManual=false;
+  est.un=unidadeDoPonto(c.lat,c.lon);est.polo=poloDoPonto(c.lat,c.lon);est.foraConfirmado=false;est.longeConfirmado=false;
+  est.endereco=textoCand(c);est.bairroFonte='informado';
+  atualizaEndereco();atualizaForaAviso();
+  mostraRes('Achamos: <b>'+esc(textoCand(c))+'</b>'+(c.dica?'<div class="loc-aviso">⚠️ '+esc(c.dica)+'</div>':'')+'<div><b>O problema é aqui?</b> Confere no mapa acima.</div>'+botoesConfirma());
+  rolaAte('mapa','start');
+}
+function confirmaLocal(){
+  const c=est.gal.cand;if(!c)return;
+  cancelaPendentes();
+  est.gal.conf=c;est.gal.cand=null;est.gal.naoAchou=false;est.gal.opcoes=null;
+  document.getElementById('erro2loc').style.display='none';
+  const t=c.rua?textoCand(c):(!est.refinando&&est.endereco?est.endereco:'o ponto marcado no mapa');
+  mostraRes('✅ <b>Local confirmado:</b> '+esc(t)+(est.polo?'<br>Este aviso aciona o <b>Polo '+esc(est.polo.nome)+'</b>':'')+'<div class="ajuda" style="font-size:14px">Se precisar ajustar, toca no mapa ou arrasta o pino.</div>','ok');
+  atualizaForaAviso();atualizaEndereco();
+}
+function naoEAqui(){
+  cancelaPendentes();
+  est.gal.cand=null;est.gal.conf=null;est.gal.naoAchou=true;est.gal.opcoes=null;
+  mostraRes('Sem problema 😉 Você pode <b>tocar no mapa bem perto do lugar</b> (dá para aproximar com dois dedos), ou conferir o nome da rua e buscar de novo.<br>Se preferir, pode <b>continuar assim mesmo</b>: o endereço e a referência vão junto e a equipe confere o Polo.','alerta');
+  atualizaForaAviso();
+}
+function naoAchado(erro){
+  cancelaPendentes();
+  est.gal.cand=null;est.gal.conf=null;est.gal.naoAchou=true;est.gal.opcoes=null;
+  mostraRes((erro?'<b>O mapa não respondeu agora</b> 📡':'<b>Não achamos essa rua no mapa</b> 😕')+'<br>Confere o nome e busca de novo, ou <b>toca no mapa perto do lugar</b>.<br>Se preferir, pode <b>continuar assim mesmo</b>: o endereço e a referência vão junto e a equipe confere o Polo.','alerta');
+  atualizaForaAviso();
+}
+function escolheOpcao(i){const o=est.gal.opcoes&&est.gal.opcoes[i];if(o)propoe(o);}
+/* busca do endereço: mapa (OpenStreetMap) + faixas de número dos Correios (ViaCEP) */
+const VIA=/^(rua|r|avenida|av|estrada|estr|est|alameda|al|travessa|tv|trav|praca|pca|rodovia|rod|viela|largo|lgo|passagem|psg)\b\s*/;
+const semVia=s=>normTxt(s).replace(VIA,'').trim();
+const TIPO_CANON={r:'rua',av:'avenida',estr:'estrada',est:'estrada',al:'alameda',tv:'travessa',trav:'travessa',pca:'praca',rod:'rodovia',lgo:'largo',psg:'passagem'};
+function tipoVia(s){const m=VIA.exec(normTxt(s));return m?(TIPO_CANON[m[1]]||m[1]):'';}
+function porTipo(l,tp,campo){if(!tp)return l;const s=l.filter(x=>tipoVia(x[campo])===tp);return s.length?s:l;}
+const ABREV={r:'Rua',av:'Avenida',estr:'Estrada',est:'Estrada',al:'Alameda',tv:'Travessa',trav:'Travessa',pca:'Praça',rod:'Rodovia',lgo:'Largo',psg:'Passagem'};
+const TITULOS={dr:'Doutor',dra:'Doutora',prof:'Professor',profa:'Professora',cel:'Coronel',gen:'General',eng:'Engenheiro',pe:'Padre',sto:'Santo',sta:'Santa',mal:'Marechal',pres:'Presidente',dep:'Deputado',ver:'Vereador',cap:'Capitão',ten:'Tenente',maj:'Major',gov:'Governador',sen:'Senador',min:'Ministro',cmte:'Comandante',brig:'Brigadeiro',alm:'Almirante',vis:'Visconde',cons:'Conselheiro',des:'Desembargador'};
+function expandeNome(s){
+  s=s.replace(/^\s*(r|av|estr|est|al|tv|trav|pça|pca|rod|lgo|psg)\.?\s+/i,(m,a)=>(ABREV[normTxt(a)]||a)+' ');
+  s=s.replace(/\b(Dr|Dra|Prof|Profa|Cel|Eng|Sto|Sta|Mal|Pres|Cmte|Brig)\.?(?=\s)/gi,(m,a)=>TITULOS[a.toLowerCase()]||m);
+  return s.replace(/\b(Gen|Pe|Dep|Ver|Cap|Ten|Maj|Gov|Sen|Min|Alm|Vis|Cons|Des)\.(?=\s)/gi,(m,a)=>TITULOS[a.toLowerCase()]||m);
+}
+function separaNumero(txt){
+  let t=String(txt||'').trim().replace(/\s+/g,' ').replace(/(\d)\.(?=\d{3}\b)/g,'$1');
+  t=t.replace(/,?\s*\b(s\/n[º°o]?|sem n[uú]mero)\.?/gi,'').replace(/[\s,.;:-]+$/,'');
+  const partes=t.split(',').map(s=>s.trim()).filter(Boolean);
+  let rua=partes[0]||'',num=null;
+  if(partes.length>1){const m=/^(?:n[º°o]?\.?\s*)?(\d{1,5})(?:\s*-?\s*[a-z])?\b/i.exec(partes[1]);if(m)num=+m[1];}
+  if(num==null){
+    const m=/^(.*\D)\s+(?:n[º°o]?\.?\s*)?(\d{1,5})(?:\s*-?\s*[a-z])?$/i.exec(rua);
+    if(m){const r=m[1].replace(/[\s-]+$/,'');if(semVia(expandeNome(r))){rua=r;num=+m[2];}}
+  }
+  return {rua:expandeNome(rua.replace(/[,\s-]+$/,'')),num};
+}
+function naFaixa(comp,n){
+  let c=normTxt(String(comp||'').replace(/(\d)\.(?=\d{3}\b)/g,'$1'));
+  if(!c)return 'todo';
+  if(/lado par/.test(c)&&n%2)return false;
+  if(/lado impar/.test(c)&&!(n%2))return false;
+  c=c.replace(/\s*lado (par|impar)\s*/,' ').trim();
+  if(!c)return true;
+  let m=/^de (\d+)(?: \d+)? ao? (?:fim|(\d+)(?: (\d+))?)/.exec(c);
+  if(m)return n>=+m[1]&&n<=(m[2]?+(m[3]||m[2]):Infinity);
+  m=/^ate (\d+)(?: (\d+))?/.exec(c);
+  if(m)return n<=+(m[2]||m[1]);
+  m=/^(\d+)$/.exec(c);
+  return !!m&&n===+m[1];
+}
+async function correiosDaRua(rua,cidade,num){
+  const l=await jsonDe('https://viacep.com.br/ws/SP/'+encodeURIComponent(cidade)+'/'+encodeURIComponent(rua)+'/json/',6000);
+  if(!Array.isArray(l))return null;
+  const alvo=semVia(rua),mesmas=porTipo(l.filter(x=>semVia(x.logradouro)===alvo),tipoVia(rua),'logradouro');
+  let sel=mesmas,faixa=false;
+  if(num!=null){
+    const f=mesmas.filter(x=>naFaixa(x.complemento||'',num)===true);
+    if(f.length){sel=f;faixa=true;}
+    else{const todo=mesmas.filter(x=>!normTxt(x.complemento||''));if(todo.length)sel=todo;}
+  }
+  return {n:mesmas.length,faixa,cep:[...new Set(sel.map(x=>String(x.cep).replace(/\D/g,'')))],bairros:[...new Set(sel.map(x=>x.bairro).filter(Boolean))]};
+}
+async function trechosMapa(params){
+  await vezNominatim();
+  const q=Object.keys(params).map(k=>k+'='+encodeURIComponent(params[k])).join('&');
+  const j=await jsonDe('https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&dedupe=0&limit=50&countrycodes=br&accept-language=pt-BR&'+q,9000);
+  if(!Array.isArray(j))return null;
+  return j.map(x=>{const a=x.address||{};return {lat:+x.lat,lon:+x.lon,rua:a.road||'',num:a.house_number||'',cep:String(a.postcode||'').replace(/\D/g,''),bairro:a.suburb||a.neighbourhood||a.quarter||'',mun:a.city||a.town||a.village||a.municipality||''};});
+}
+async function centroBairro(b,cidade){
+  await vezNominatim();
+  const j=await jsonDe('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=3&countrycodes=br&accept-language=pt-BR&q='+encodeURIComponent(b.split('(')[0].trim()+', '+cidade+', SP'),8000);
+  const c0=CIDADES[cidade],x=Array.isArray(j)?j.find(y=>!c0||distanciaM(+y.lat,+y.lon,c0[0],c0[1])<60000):null;
+  return x?{lat:+x.lat,lon:+x.lon}:null;
+}
+function agrupa(its,lim){
+  const gr=[];
+  for(const it of its){
+    const perto=gr.filter(g=>g.some(o=>distanciaM(o.lat,o.lon,it.lat,it.lon)<=lim));
+    if(!perto.length){gr.push([it]);continue;}
+    perto[0].push(it);
+    for(const g of perto.slice(1)){perto[0].push(...g);gr.splice(gr.indexOf(g),1);}
+  }
+  return gr;
+}
+function meio(g){const la=g.reduce((s,o)=>s+o.lat,0)/g.length,lo=g.reduce((s,o)=>s+o.lon,0)/g.length;return g.reduce((b,o)=>distanciaM(o.lat,o.lon,la,lo)<distanciaM(b.lat,b.lon,la,lo)?o:b,g[0]);}
+function extensao(g){let m=0;for(const a of g)for(const b of g)m=Math.max(m,distanciaM(a.lat,a.lon,b.lat,b.lon));return m;}
+function juntaMesmoBairro(gs){const m=new Map();gs.forEach((g,i)=>{const k=baseBairro(meio(g).bairro)||('#'+i);if(!m.has(k))m.set(k,[]);m.get(k).push(...g);});return [...m.values()];}
+function polosDe(g){return [...new Set(g.map(o=>{const p=poloDoPonto(o.lat,o.lon);return p?'Polo '+p.nome:'fora do piloto';}))];}
+function avisosGrupo(g,num,localizado){
+  const audit=[];let dica='';
+  if(!localizado&&extensao(g)>1500){
+    audit.push(num!=null?'rua longa: o número não foi localizado no mapa, ponto aproximado':'rua longa sem número informado: ponto aproximado');
+    dica='A rua é comprida e o mapa não mostra o número: o pino ficou num ponto aproximado. Se souber o lugar exato, toca no mapa 😉';
+  }
+  const ps=polosDe(g);
+  if(ps.length>1)audit.push('a rua passa por mais de uma área ('+ps.join(' / ')+'): conferir o Polo');
+  return {audit,dica};
+}
+function mkCand(lat,lon,fonte,bairro,av,base,ruaMapa){return {lat,lon,fonte,bairro:bairro||'',avisos:av.audit,dica:av.dica,rua:ruaMapa||base.rua,num:base.num,cidade:base.cidade};}
+async function localizaEndereco(txt,cidade){
+  const {rua,num}=separaNumero(txt),base={rua,num,cidade};
+  const cid=normTxt(cidade),alvo=semVia(rua),c0=CIDADES[cidade];
+  const filtra=l=>l.filter(x=>(!x.mun||normTxt(x.mun)===cid)&&semVia(x.rua)===alvo&&(!c0||distanciaM(x.lat,x.lon,c0[0],c0[1])<60000));
+  let its=await trechosMapa({street:(num!=null?num+' ':'')+rua,city:cidade,state:'São Paulo'});
+  const tp=tipoVia(rua);
+  if(its){its=porTipo(filtra(its),tp,'rua');if(!its.length){const j=await trechosMapa({q:rua+', '+cidade+', SP'});if(j)its=porTipo(filtra(j),tp,'rua');}}
+  const co=await correiosDaRua(rua,cidade,num);
+  if(!its)return {...base,erro:true};
+  const bairroCo=co&&co.bairros.length===1?co.bairros[0]:'';
+  if(num!=null){
+    const exs=its.filter(x=>parseInt(x.num,10)===num);
+    if(exs.length){
+      const gs=agrupa(exs,700),sem={audit:[],dica:''};
+      if(gs.length===1){const ex=gs[0][0];return {...base,cand:mkCand(ex.lat,ex.lon,'numero',bairroCo||ex.bairro,sem,base,ex.rua)};}
+      return {...base,opcoes:gs.map(g=>mkCand(g[0].lat,g[0].lon,'opcao',g[0].bairro,sem,base,g[0].rua))};
+    }
+  }
+  if(!its.length){
+    if(bairroCo){
+      const pb=await centroBairro(bairroCo,cidade);
+      if(pb)return {...base,cand:mkCand(pb.lat,pb.lon,'bairro',bairroCo,{audit:['a rua não aparece no mapa: ponto no bairro '+bairroCo+' (aproximado)'],dica:'Essa rua ainda não aparece no mapa: o pino ficou no bairro '+bairroCo+'. Se souber o lugar exato, toca no mapa 😉'},base)};
+    }
+    return {...base,nada:true};
+  }
+  const opcoes=gs=>({...base,opcoes:gs.map(g=>{const m=meio(g);return mkCand(m.lat,m.lon,'opcao',m.bairro,avisosGrupo(g,num,false),base,m.rua);})});
+  const bairros=new Set((co?co.bairros:[]).map(b=>baseBairro(b)));
+  let sub=its,fonte='rua';
+  if(bairros.size>1){
+    const gs=juntaMesmoBairro(agrupa(its,700));
+    if(gs.length>1)return opcoes(gs);
+    sub=gs[0];
+  }else{
+    if(co&&co.cep.length){
+      const s=its.filter(x=>co.cep.includes(x.cep));
+      if(s.length){sub=s;fonte='cep';}
+      else if(bairros.size){const s2=its.filter(x=>bairros.has(baseBairro(x.bairro)));if(s2.length){sub=s2;fonte='bairro-rua';}}
+    }
+    if(!co||co.n===0){const gs=agrupa(sub,2500);if(gs.length>1)return opcoes(gs);}
+  }
+  const m=meio(sub);
+  return {...base,cand:mkCand(m.lat,m.lon,fonte,bairroCo||m.bairro,avisosGrupo(sub,num,(fonte==='cep'||fonte==='bairro-rua')&&!!(co&&co.faixa)),base,m.rua)};
+}
+async function buscarEndereco(){
+  if(document.getElementById('btnBuscar').disabled)return;
+  const txt=document.getElementById('locRua').value,cidade=document.getElementById('locCidade').value;
+  const {rua,num}=separaNumero(txt);
+  if(letras(rua)<3){mostraRes('Digita o <b>nome da rua</b> e o número, ex.: Rua Maria Carlota, 250 😉','alerta');document.getElementById('locRua').focus();return;}
+  limpaGaleria();est.gal.buscou=true;
+  const seq=est.gal.seq,btn=document.getElementById('btnBuscar');
+  btn.disabled=true;btn.textContent='Procurando no mapa… 🔎';
+  mostraRes('Procurando <b>'+esc(rua+(num!=null?', '+num:''))+'</b> em '+esc(cidade)+'…');
+  rolaAte('locRes');
+  let r;
+  try{r=await localizaEndereco(txt,cidade);}catch(x){r={erro:true};}
+  if(seq!==est.gal.seq)return;
+  btn.disabled=false;btn.textContent='🔎 Buscar no mapa';
+  if(r.opcoes){
+    est.gal.opcoes=r.opcoes;
+    const rot=r.opcoes.map(o=>o.bairro||'bairro não informado');
+    mostraRes('Achamos mais de uma <b>'+esc(r.rua)+'</b> em '+esc(r.cidade)+'. <b>Qual delas?</b>'+r.opcoes.map((o,i)=>'<button class="loc-opcao" type="button" onclick="escolheOpcao('+i+')">📍 '+esc(o.rua)+' · <b>'+esc(rot[i])+(rot.indexOf(rot[i])!==rot.lastIndexOf(rot[i])?' ('+(i+1)+')':'')+'</b></button>').join('')+'<button class="loc-opcao" type="button" onclick="naoEAqui()">Não é nenhuma dessas</button>');
+  }else if(r.cand)propoe(r.cand);
+  else naoAchado(!!r.erro);
+}
+document.getElementById('locRua').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();buscarEndereco();}});
+['input','change'].forEach(ev=>['locRua','locCidade'].forEach(id=>document.getElementById(id).addEventListener(ev,()=>{
+  const c=est.gal.conf||est.gal.cand;
+  if(!est.gal.buscou||(c&&['gps','pino','foto'].includes(c.fonte)))return;
+  limpaGaleria();
+  mostraRes('Endereço alterado: toca em <b>Buscar no mapa</b> de novo 🔎','alerta');
+})));
+function validaLocalGaleria(){
+  const ref=document.getElementById('locRef').value.trim(),rua=document.getElementById('locRua').value.trim();
+  const semRef='Falta o <b>ponto de referência</b> 📍 Ex.: em frente ao Posto BR. Ajuda muito a equipe a chegar.';
+  if(est.gal.conf)return letras(ref)<5?semRef:'';
+  if(est.gal.cand)return 'Confirma o local no mapa: toca em <b>✅ Sim, é aqui</b> 😉';
+  if(est.gal.opcoes)return 'Escolhe qual das ruas é a certa, logo abaixo do mapa 😉';
+  if(est.gal.naoAchou){if(letras(rua)<3)return 'Digita a rua e o número do local, ex.: Rua Maria Carlota, 250.';return letras(ref)<5?semRef:'';}
+  return 'Conta onde foi 📍 Digita a rua e o número e toca em <b>Buscar no mapa</b> (ou em <b>Estou no local agora</b>).';
+}
+function localInformado(){
+  const cid=document.getElementById('locCidade').value,{rua,num}=separaNumero(document.getElementById('locRua').value),c=est.gal.conf;
+  if(c&&c.rua)return textoCand(c);
+  if(c)return !est.refinando&&est.endereco?est.endereco:'ponto marcado no mapa ('+est.lat.toFixed(5)+', '+est.lon.toFixed(5)+')';
+  if(letras(rua)>=3)return [rua+(num!=null?', '+num:''),cid].join(', ');
+  return 'ponto marcado no mapa, '+cid;
+}
+function localEnvio(){const ref=document.getElementById('locRef').value.trim();return (localInformado()+(ref?' · Ref.: '+ref:'')).slice(0,250);}
+async function carimbaGaleria(){
+  const ref=document.getElementById('locRef').value.trim(),cid=document.getElementById('locCidade').value;
+  const local=localInformado().replace(cid,cid.replace(/ /g,' '));
+  for(let i=0;i<2;i++){
+    const f=est.fotos[i];
+    if(!f||f.origem!=='galeria')continue;
+    let img;try{img=await abreImagem(f.orig);}catch(x){continue;}
+    const c=document.createElement('canvas');c.width=img.width;c.height=img.height;
+    const g=c.getContext('2d');g.drawImage(img,0,0);
+    const fh=Math.max(20,Math.round(Math.min(c.width,c.height)*0.042));
+    g.font='700 '+fh+'px system-ui,sans-serif';
+    const maxw=c.width-fh*1.2;
+    const corta=s=>{let x=s;while(x.length>8&&g.measureText(x+'…').width>maxw)x=x.slice(0,-2);return x===s?s:x.trimEnd()+'…';};
+    const linhas=['Foto da galeria · '+dataDaFoto(f),(aConfirmar()?'Local informado (a confirmar): ':'Local informado: ')+local];
+    if(ref)linhas.push('Ref.: '+ref);
+    const quebra=(s,max)=>{
+      const out=[];let cur='';
+      for(const w of s.split(' ')){const x=cur?cur+' '+w:w;if(!cur||g.measureText(x).width<=maxw)cur=x;else{out.push(cur);cur=w;}}
+      if(cur)out.push(cur);
+      if(out.length>max){const r=out.slice(0,max);r[max-1]=corta(r[max-1]+' '+out.slice(max).join(' '));return r;}
+      return out.map(corta);
+    };
+    const ls=[].concat(...linhas.map((l,k)=>quebra(l,k===0?1:2))),barra=fh*(ls.length+0.9);
+    g.fillStyle='rgba(138,75,6,0.86)';g.fillRect(0,c.height-barra,c.width,barra);
+    g.fillStyle='#fff';
+    ls.forEach((l,k)=>g.fillText(l,fh*0.6,c.height-barra+fh*(k+1.15)));
+    f.url=c.toDataURL('image/jpeg',0.82);
+    mostraSlot(i);
+  }
+}
+function montaObservacaoGaleria(){
+  const obs=document.getElementById('obs').value.trim()||'(sem observação)';
+  const ref=document.getElementById('locRef').value.trim(),cid=document.getElementById('locCidade').value;
+  const {rua,num}=separaNumero(document.getElementById('locRua').value),c=est.gal.conf;
+  let o=(ref?'Referência: '+ref+'\n':'')+obs;
+  const au=[est.fotos.map((f,i)=>f?'foto '+(i+1)+(f.origem==='galeria'?' da galeria ('+dataDaFoto(f)+')':' da câmera'):'').filter(Boolean).join(', ')];
+  if(letras(rua)>=3)au.push('endereço digitado: '+rua+(num!=null?', '+num:'')+' - '+cid);
+  if(c){
+    au.push('local confirmado pelo usuário: '+(FONTES[c.fonte]||c.fonte));
+    if(['gps','pino','foto'].includes(c.fonte)&&est.endereco)au.push('pino em: '+est.endereco);
+    (c.avisos||[]).forEach(a=>au.push(a));
+    if(!est.polo)au.push('FORA DA ÁREA DO PILOTO (UN Leste) - confirmado pelo usuário');
+    if(est.gpsLat!=null)au.push('aparelho a '+fmtDist(distanciaM(est.gpsLat,est.gpsLon,est.lat,est.lon))+' do local');
+  }else{
+    au.push('ENDEREÇO NÃO ENCONTRADO NO MAPA - Polo a confirmar; a coordenada enviada NÃO é o local (ponto genérico de '+cid+')');
+  }
+  o+='\n[Verificação do app: '+au.join('; ')+']';
+  const q=c&&c.rua?textoCand(c)+', SP':(c||letras(rua)<3?est.lat.toFixed(6)+','+est.lon.toFixed(6):rua+(num!=null?', '+num:'')+', '+cid+', SP');
+  return o+'\nAbrir no Google Maps: https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
 }
 /* validações e envio */
 const irPara3Original=irPara;
-window.irPara=function(n){
+window.irPara=async function(n){
   if(n===3){
-    const semFoto=!est.fotos[0]&&!est.fotos[1], semLocal=!est.gpsOk;
+    const semFoto=!est.fotos[0]&&!est.fotos[1];
+    const msgLoc=est.gal.ativo?validaLocalGaleria():(est.gpsOk?'':ERRO_LOC_PADRAO);
     document.getElementById('erro2').style.display=semFoto?'block':'none';
-    document.getElementById('erro2loc').style.display=semLocal?'block':'none';
-    if(semFoto||semLocal)return;
+    const el=document.getElementById('erro2loc');el.innerHTML=msgLoc;el.style.display=msgLoc?'block':'none';
+    if(semFoto||msgLoc)return;
+    if(est.gal.ativo){
+      if(est.carimbando)return;
+      est.carimbando=true;
+      try{
+        cancelaPendentes();
+        for(let i=0;i<20&&est.refinando;i++)await esperaMs(200);
+        await carimbaGaleria();
+      }finally{est.carimbando=false;}
+      if(document.getElementById('t2').classList.contains('oculta'))return;
+    }
     atualizaDestino();
   }
   irPara3Original(n);
@@ -494,12 +980,13 @@ function ruaTrocada(){
   return !!(est.fixManual&&est.ruaGps&&rp&&rp.toLowerCase()!==est.ruaGps.toLowerCase());
 }
 function atualizaForaAviso(){
+  const g=est.gal.ativo;
   const f=document.getElementById('foraPiloto');
-  if(f)mostraAviso(f,!est.polo,'block');
+  if(f)mostraAviso(f,!est.polo&&(!g||!!(est.gal.cand||est.gal.conf)),'block');
   const a=document.getElementById('avisoDist');
   if(a){
-    const d=est.gpsLat!=null?distanciaM(est.gpsLat,est.gpsLon,est.lat,est.lon):null;
-    const longe=d!=null&&d>300, rua=ruaTrocada();
+    const d=(!g&&est.gpsLat!=null)?distanciaM(est.gpsLat,est.gpsLon,est.lat,est.lon):null;
+    const longe=d!=null&&d>300, rua=!g&&ruaTrocada();
     if(longe)a.querySelector('span').textContent='O pino está a '+fmtDist(d)+' de onde você está. Confere se é o ponto certo da ocorrência.';
     else if(rua)a.querySelector('span').textContent='O pino foi para a '+ruaDoPino()+', mas você está na '+est.ruaGps+'. Confere se é o ponto certo da ocorrência.';
     mostraAviso(a,longe||rua,'flex');
@@ -512,6 +999,7 @@ function distanciaM(lat1,lon1,lat2,lon2){
 }
 function atualizaDestino(){
   const d=document.getElementById('destinoPolo');
+  if(aConfirmar()){d.classList.add('fora');d.innerHTML='🧭 <span>Não achamos o endereço no mapa. O aviso segue com o endereço e a referência, e a equipe confere o Polo, tá bom?</span>';return;}
   if(est.polo){d.classList.remove('fora');d.innerHTML='📬 <span>Este aviso aciona: <b>Polo '+esc(est.polo.nome)+'</b></span>';}
   else{d.classList.add('fora');d.innerHTML='🧭 <span>Ponto fora da área do piloto (UN Leste). O aviso vai para a central do teste, tá bom?</span>';}
 }
@@ -553,13 +1041,14 @@ async function enviar(){
   const v=validaRegistro(nome,fone,unidade);
   if(v.msg){erro3.textContent=v.msg;erro3.style.display='block';return;}
   unidade=v.unidade;document.getElementById('unidade').value=unidade;
-  if(!est.polo&&!est.foraConfirmado){
+  const semMapa=aConfirmar();
+  if(!est.polo&&!semMapa&&!est.foraConfirmado){
     est.foraConfirmado=true;
     erro3.textContent='Este ponto está fora da área coberta pelo piloto (UN Leste) 🧭 Confere o pino no mapa. Se o local estiver certo mesmo, toca em Enviar de novo que a gente registra assim.';
     erro3.style.display='block';
     return;
   }
-  if(est.gpsLat!=null&&!est.longeConfirmado){
+  if(!est.gal.ativo&&est.gpsLat!=null&&!est.longeConfirmado){
     const dL=distanciaM(est.gpsLat,est.gpsLon,est.lat,est.lon);
     if(dL>2000){
       est.longeConfirmado=true;
@@ -575,9 +1064,16 @@ async function enviar(){
   const btn=document.getElementById('btnEnviar');
   btn.disabled=true;btn.textContent='Enviando… 📡';
   for(let i=0;i<20&&est.refinando;i++)await esperaMs(200);
+  if(est.gal.ativo&&validaLocalGaleria()){
+    btn.disabled=false;btn.textContent='Enviar meu aviso 💙';
+    irPara3Original(2);
+    const el=document.getElementById('erro2loc');el.innerHTML=validaLocalGaleria();el.style.display='block';
+    return;
+  }
   const quando=agora.toLocaleDateString('pt-BR')+' às '+agora.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   const fotosEnvio=est.fotos.filter(Boolean).map((f,i)=>({Name:proto+'_foto'+(i+1)+'.jpg',ContentBytes:f.url.split(',')[1]}));
   function montaObservacao(){
+    if(est.gal.ativo)return montaObservacaoGaleria();
     let o=document.getElementById('obs').value.trim()||'(sem observação)';
     const audit=[];
     if(!est.polo)audit.push('FORA DA ÁREA DO PILOTO (UN Leste) - confirmado pelo usuário');
@@ -595,16 +1091,20 @@ async function enviar(){
   const pacote={
     protocolo:proto,
     tipo:TIPOS[est.tipo]?TIPOS[est.tipo].email:String(est.tipo),
-    local:est.endereco||est.lat.toFixed(5)+', '+est.lon.toFixed(5),
-    lat:est.lat,lon:est.lon,
-    polo:est.polo?est.polo.nome:'FORA DA ÁREA DO PILOTO (conferir local)',
+    local:est.gal.ativo?localEnvio():(est.endereco||est.lat.toFixed(5)+', '+est.lon.toFixed(5)),
+    lat:semMapa?CIDADES[document.getElementById('locCidade').value][0]:est.lat,
+    lon:semMapa?CIDADES[document.getElementById('locCidade').value][1]:est.lon,
+    polo:semMapa?'A CONFIRMAR (endereço não encontrado no mapa)':(est.polo?est.polo.nome:'FORA DA ÁREA DO PILOTO (conferir local)'),
     observacao:montaObservacao(),
     nome:nome,telefone:fone,unidade:unidade,
     registradoEm:quando,
-    gpsLat:est.gpsLat,gpsLon:est.gpsLon,
-    distPinoGpsM:est.gpsLat!=null?distanciaM(est.gpsLat,est.gpsLon,est.lat,est.lon):null,
-    dentroPiloto:!!est.polo,
-    bairroFonte:est.bairroFonte,
+    gpsLat:est.gal.ativo?null:est.gpsLat,gpsLon:est.gal.ativo?null:est.gpsLon,
+    distPinoGpsM:(est.gpsLat!=null&&!semMapa)?distanciaM(est.gpsLat,est.gpsLon,est.lat,est.lon):null,
+    dentroPiloto:!semMapa&&!!est.polo,
+    bairroFonte:est.gal.ativo?'informado':est.bairroFonte,
+    origemFotos:est.fotos.filter(Boolean).map(f=>f.origem).join(','),
+    localFonte:est.gal.ativo?(est.gal.conf?est.gal.conf.fonte:'nao_encontrado'):((est.gpsLat==null||est.fixManual)?'pino':'gps'),
+    referencia:est.gal.ativo?document.getElementById('locRef').value.trim():'',
     fotos:fotosEnvio
   };
   try{
@@ -621,18 +1121,20 @@ async function enviar(){
   }
   btn.disabled=false;btn.textContent='Enviar meu aviso 💙';
   document.getElementById('protoTxt').textContent=proto;
-  const fotos=est.fotos.filter(Boolean).length;
+  const fotos=est.fotos.filter(Boolean).length,nGal=est.fotos.filter(f=>f&&f.origem==='galeria').length;
   const linhas=[
     ['Tipo', TIPOS[est.tipo]?TIPOS[est.tipo].recibo:String(est.tipo)],
     ['Local', pacote.local],
-    ['Polo acionado', est.polo?est.polo.nome:'fora da área do piloto'],
-    ['Região', est.un?est.un.nome+' ('+est.un.sigla+')':'fora da UN Leste'],
-    ['Fotos', fotos+' foto'+(fotos>1?'s':'')+' com data e hora'],
+    ['Polo acionado', semMapa?'a confirmar pela equipe':(est.polo?est.polo.nome:'fora da área do piloto')],
+    ['Região', semMapa?'a confirmar':(est.un?est.un.nome+' ('+est.un.sigla+')':'fora da UN Leste')],
+    ['Fotos', fotos+' foto'+(fotos>1?'s':'')+(nGal?(nGal===fotos?' da galeria':' ('+nGal+' da galeria)'):' com data e hora')],
     ['Registrado em', quando],
     ['Por', nome+' · '+unidade]
   ];
   document.getElementById('reciboDet').innerHTML=linhas.map(l=>'<div><span>'+l[0]+'</span><b>'+esc(l[1])+'</b></div>').join('');
-  document.getElementById('reciboMsg').textContent=est.polo
+  document.getElementById('reciboMsg').textContent=semMapa
+    ?'Aviso enviado! A equipe confere o endereço e aciona o Polo. Guarde o número do protocolo:'
+    :est.polo
     ?'O polo responsável acabou de receber por e-mail. Guarde o número do protocolo:'
     :'Aviso enviado à equipe do piloto para conferência do local. Guarde o número do protocolo:';
   irPara3Original(4);
@@ -641,6 +1143,10 @@ function reiniciar(){
   est.tipo=null;est.fotos=[null,null];est.protoAtual=null;
   removeFoto(0);removeFoto(1);
   document.getElementById('obs').value='';
+  limpaGaleria();est.gal.ativo=false;
+  ['locRua','locRef'].forEach(id=>document.getElementById(id).value='');document.getElementById('locCidade').selectedIndex=0;
+  mostraRes('');document.getElementById('blocoLocal').classList.add('oculta');document.getElementById('btnGpsMapa').classList.remove('oculta');
+  document.getElementById('erroFoto').style.display='none';
   est.gpsOk=false;est.endereco='';est.un=null;est.polo=null;est.gpsPedido=false;
   est.gpsLat=null;est.gpsLon=null;est.ruaGps=null;est.fixManual=false;est.foraConfirmado=false;est.longeConfirmado=false;est.geoSeq++;est.refinando=false;est.bairroFonte='';
   document.getElementById('foraPiloto').style.display='none';
