@@ -220,7 +220,7 @@
     <button class="btn" onclick="reiniciar()">Registrar outra ocorrência</button>
   </div>
 </main>
-<footer>Eu vi um Vazamento · uso interno Sabesp<br>versão 2.5 · 30/09/2026</footer>
+<footer>Eu vi um Vazamento · uso interno Sabesp<br>versão 2.6 · 07/10/2026</footer>
 <div id="visor" class="oculta" onclick="this.classList.add('oculta')">
   <img alt="foto ampliada">
   <div class="dica">A data, a hora e a posição ficam gravadas na parte de baixo da foto</div>
@@ -252,7 +252,7 @@ function poloDoPonto(lat,lon){
 const FLUXO_URL='https://default5f9d74c8ec924488a2c7bdce634262.fa.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/24/workflows/64ae8af3f7214f36a17cb0c5fc4d6494/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=UBfzHK_KwFSebzYuN2cPJVDU_jO8b03SfxDlmhkpU0w';
 const TIPOS={'água':{recibo:'💧 Vazamento de água',email:'Vazamento de água'},'esgoto':{recibo:'🟤 Esgoto na rua',email:'Esgoto na rua'},'vala':{recibo:'🚧 Vala',email:'Vala'},'pv':{recibo:'⚠️ PV com tampa exposta',email:'PV - tampa exposta ou desnivelada'}};
 const est={tipo:null,fotos:[null,null],lat:-23.55,lon:-46.63,gpsOk:false,endereco:'',un:null,polo:null,slot:0,gpsPedido:false,protoAtual:null,gpsLat:null,gpsLon:null,ruaGps:null,fixManual:false,foraConfirmado:false,longeConfirmado:false,geoSeq:0,refinando:false,bairroFonte:'',carimbando:false,ocupadoAte:0,
-  gal:{ativo:false,cand:null,conf:null,naoAchou:false,buscou:false,aqui:false,opcoes:null,seq:0}};
+  gal:{ativo:false,cand:null,conf:null,naoAchou:false,buscou:false,aqui:false,opcoes:null,sugestoes:null,seq:0}};
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function irPara(n){
   for(let i=1;i<=4;i++)document.getElementById('t'+i).classList.toggle('oculta',i!==n);
@@ -545,7 +545,7 @@ function atualizaMapaGaleria(){
 function botoesConfirma(){return '<button class="btn btn-ok" type="button" onclick="confirmaLocal()">✅ Sim, é aqui</button><button class="btn fantasma" type="button" onclick="naoEAqui()">Não é aqui</button>';}
 function cancelaPendentes(){est.gal.aqui=false;est.gal.seq++;const b=document.getElementById('btnBuscar');b.disabled=false;b.textContent='🔎 Buscar no mapa';}
 function limpaGaleria(){
-  est.gal.seq++;est.gal.cand=null;est.gal.conf=null;est.gal.naoAchou=false;est.gal.buscou=false;est.gal.aqui=false;est.gal.opcoes=null;
+  est.gal.seq++;est.gal.cand=null;est.gal.conf=null;est.gal.naoAchou=false;est.gal.buscou=false;est.gal.aqui=false;est.gal.opcoes=null;est.gal.sugestoes=null;
   const b=document.getElementById('btnBuscar');b.disabled=false;b.textContent='🔎 Buscar no mapa';
 }
 function atualizaModoGaleria(){
@@ -659,7 +659,7 @@ function propoeFotoGps(lat,lon){
   cancelaPendentes();
   pino.setLatLng([lat,lon]);mapa.setView([lat,lon],18);
   fixaLocal(lat,lon,true);
-  est.gal.cand={lat,lon,fonte:'foto'};est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;
+  est.gal.cand={lat,lon,fonte:'foto'};est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;est.gal.sugestoes=null;
   atualizaForaAviso();
   mostraRes('📷 A foto trouxe a localização de onde foi tirada. <b>O problema é neste ponto?</b> Confere no mapa.'+botoesConfirma());
   rolaAte('mapa','start');
@@ -671,7 +671,7 @@ function estouNoLocal(){
 }
 function gpsNaGaleria(lat,lon){
   cancelaPendentes();
-  est.gal.cand={lat,lon,fonte:'gps'};est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;
+  est.gal.cand={lat,lon,fonte:'gps'};est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;est.gal.sugestoes=null;
   atualizaForaAviso();
   mostraRes('📍 Achamos você aqui. <b>O problema é neste ponto?</b> Confere no mapa.'+botoesConfirma());
   rolaAte('mapa','start');
@@ -679,14 +679,14 @@ function gpsNaGaleria(lat,lon){
 function pinoManualGaleria(){
   if(!est.gal.ativo)return;
   cancelaPendentes();
-  est.gal.cand={lat:est.lat,lon:est.lon,fonte:'pino'};est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;
+  est.gal.cand={lat:est.lat,lon:est.lon,fonte:'pino'};est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;est.gal.sugestoes=null;
   atualizaForaAviso();
   mostraRes('📍 Você marcou este ponto no mapa. <b>O problema é aqui?</b>'+botoesConfirma());
 }
 function textoCand(c){return [c.rua+(c.num!=null?', '+c.num:''),c.bairro,c.cidade].filter(Boolean).join(', ');}
 function propoe(c){
   cancelaPendentes();
-  est.gal.cand=c;est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;
+  est.gal.cand=c;est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;est.gal.sugestoes=null;
   est.geoSeq++;est.refinando=false;clearTimeout(geoTimer);
   pino.setLatLng([c.lat,c.lon]);mapa.setView([c.lat,c.lon],c.fonte==='bairro'?15:17);
   est.lat=c.lat;est.lon=c.lon;est.gpsOk=true;est.fixManual=false;
@@ -699,7 +699,7 @@ function propoe(c){
 function confirmaLocal(){
   const c=est.gal.cand;if(!c)return;
   cancelaPendentes();
-  est.gal.conf=c;est.gal.cand=null;est.gal.naoAchou=false;est.gal.opcoes=null;
+  est.gal.conf=c;est.gal.cand=null;est.gal.naoAchou=false;est.gal.opcoes=null;est.gal.sugestoes=null;
   document.getElementById('erro2loc').style.display='none';
   const t=c.rua?textoCand(c):(!est.refinando&&est.endereco?est.endereco:'o ponto marcado no mapa');
   mostraRes('✅ <b>Local confirmado:</b> '+esc(t)+(est.polo?'<br>Este aviso aciona o <b>Polo '+esc(est.polo.nome)+'</b>':'')+'<div class="ajuda" style="font-size:14px">Se precisar ajustar, toca no mapa ou arrasta o pino.</div>','ok');
@@ -707,13 +707,13 @@ function confirmaLocal(){
 }
 function naoEAqui(){
   cancelaPendentes();
-  est.gal.cand=null;est.gal.conf=null;est.gal.naoAchou=true;est.gal.opcoes=null;
+  est.gal.cand=null;est.gal.conf=null;est.gal.naoAchou=true;est.gal.opcoes=null;est.gal.sugestoes=null;
   mostraRes('Sem problema 😉 Você pode <b>tocar no mapa bem perto do lugar</b> (dá para aproximar com dois dedos), ou conferir o nome da rua e buscar de novo.<br>Se preferir, pode <b>continuar assim mesmo</b>: o endereço e a referência vão junto e a equipe confere o Polo.','alerta');
   atualizaForaAviso();
 }
 function naoAchado(erro){
   cancelaPendentes();
-  est.gal.cand=null;est.gal.conf=null;est.gal.naoAchou=true;est.gal.opcoes=null;
+  est.gal.cand=null;est.gal.conf=null;est.gal.naoAchou=true;est.gal.opcoes=null;est.gal.sugestoes=null;
   mostraRes((erro?'<b>O mapa não respondeu agora</b> 📡':'<b>Não achamos essa rua no mapa</b> 😕')+'<br>Confere o nome e busca de novo, ou <b>toca no mapa perto do lugar</b>.<br>Se preferir, pode <b>continuar assim mesmo</b>: o endereço e a referência vão junto e a equipe confere o Polo.','alerta');
   atualizaForaAviso();
 }
@@ -723,6 +723,34 @@ const VIA=/^(rua|r|avenida|av|estrada|estr|est|alameda|al|travessa|tv|trav|praca
 const semVia=s=>normTxt(s).replace(VIA,'').trim();
 const TIPO_CANON={r:'rua',av:'avenida',estr:'estrada',est:'estrada',al:'alameda',tv:'travessa',trav:'travessa',pca:'praca',rod:'rodovia',lgo:'largo',psg:'passagem'};
 function tipoVia(s){const m=VIA.exec(normTxt(s));return m?(TIPO_CANON[m[1]]||m[1]):'';}
+const PARTICULAS=new Set(['de','da','do','dos','das','e']);
+function fonetico(s){
+  return semVia(s).split(' ').filter(w=>w&&!PARTICULAS.has(w)).join(' ')
+    .replace(/ph/g,'f').replace(/th/g,'t').replace(/y/g,'i').replace(/w/g,'v')
+    .replace(/ct/g,'t').replace(/pt/g,'t').replace(/(^|[^cln])h/g,'$1')
+    .replace(/([aeiou])z([aeiou])/g,'$1s$2').replace(/z\b/g,'s').replace(/([a-z])\1+/g,'$1');
+}
+const mesmoNome=(a,b)=>!!fonetico(a)&&fonetico(a)===fonetico(b);
+function distEd(a,b){let p=Array.from({length:b.length+1},(_,j)=>j);for(let i=1;i<=a.length;i++){const c=[i];for(let j=1;j<=b.length;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[b.length];}
+function parecido(a,b){const x=fonetico(a),y=fonetico(b);if(!x||!y)return false;if(x===y)return true;return distEd(x,y)<=Math.max(1,Math.floor(Math.min(x.length,y.length)*0.2));}
+async function sugereRuas(rua,cidade){
+  const pal=expandeNome(rua).split(/\s+/).filter(w=>letras(w)>=3&&!PARTICULAS.has(normTxt(w))&&!VIA.test(normTxt(w)+' '));
+  if(!pal.length)return [];
+  const buscas=[];
+  if(pal.length>=2)buscas.push(pal.slice(-2).join(' '));
+  buscas.push(pal.slice().sort((a,b)=>b.length-a.length)[0]);
+  for(const q of buscas){
+    const l=await jsonDe('https://viacep.com.br/ws/SP/'+encodeURIComponent(cidade)+'/'+encodeURIComponent(q)+'/json/',6000);
+    if(!Array.isArray(l))continue;
+    const vistos=new Set(),out=[];
+    l.filter(x=>parecido(x.logradouro,rua)).sort((a,b)=>distEd(fonetico(a.logradouro),fonetico(rua))-distEd(fonetico(b.logradouro),fonetico(rua))).forEach(x=>{
+      const k=normTxt(x.logradouro)+'|'+normTxt(x.bairro);
+      if(!vistos.has(k)&&out.length<4){vistos.add(k);out.push({nome:x.logradouro,bairro:x.bairro||''});}
+    });
+    if(out.length)return out;
+  }
+  return [];
+}
 function porTipo(l,tp,campo){if(!tp)return l;const s=l.filter(x=>tipoVia(x[campo])===tp);return s.length?s:l;}
 const ABREV={r:'Rua',av:'Avenida',estr:'Estrada',est:'Estrada',al:'Alameda',tv:'Travessa',trav:'Travessa',pca:'Praça',rod:'Rodovia',lgo:'Largo',psg:'Passagem'};
 const TITULOS={dr:'Doutor',dra:'Doutora',prof:'Professor',profa:'Professora',cel:'Coronel',gen:'General',eng:'Engenheiro',pe:'Padre',sto:'Santo',sta:'Santa',mal:'Marechal',pres:'Presidente',dep:'Deputado',ver:'Vereador',cap:'Capitão',ten:'Tenente',maj:'Major',gov:'Governador',sen:'Senador',min:'Ministro',cmte:'Comandante',brig:'Brigadeiro',alm:'Almirante',vis:'Visconde',cons:'Conselheiro',des:'Desembargador'};
@@ -760,7 +788,7 @@ function naFaixa(comp,n){
 async function correiosDaRua(rua,cidade,num){
   const l=await jsonDe('https://viacep.com.br/ws/SP/'+encodeURIComponent(cidade)+'/'+encodeURIComponent(rua)+'/json/',6000);
   if(!Array.isArray(l))return null;
-  const alvo=semVia(rua),mesmas=porTipo(l.filter(x=>semVia(x.logradouro)===alvo),tipoVia(rua),'logradouro');
+  const mesmas=porTipo(l.filter(x=>mesmoNome(x.logradouro,rua)),tipoVia(rua),'logradouro');
   let sel=mesmas,faixa=false;
   if(num!=null){
     const f=mesmas.filter(x=>naFaixa(x.complemento||'',num)===true);
@@ -810,7 +838,7 @@ function mkCand(lat,lon,fonte,bairro,av,base,ruaMapa){return {lat,lon,fonte,bair
 async function localizaEndereco(txt,cidade){
   const {rua,num}=separaNumero(txt),base={rua,num,cidade};
   const cid=normTxt(cidade),alvo=semVia(rua),c0=CIDADES[cidade];
-  const filtra=l=>l.filter(x=>(!x.mun||normTxt(x.mun)===cid)&&semVia(x.rua)===alvo&&(!c0||distanciaM(x.lat,x.lon,c0[0],c0[1])<60000));
+  const filtra=l=>l.filter(x=>(!x.mun||normTxt(x.mun)===cid)&&mesmoNome(x.rua,rua)&&(!c0||distanciaM(x.lat,x.lon,c0[0],c0[1])<60000));
   let its=await trechosMapa({street:(num!=null?num+' ':'')+rua,city:cidade,state:'São Paulo'});
   const tp=tipoVia(rua);
   if(its){its=porTipo(filtra(its),tp,'rua');if(!its.length){const j=await trechosMapa({q:rua+', '+cidade+', SP'});if(j)its=porTipo(filtra(j),tp,'rua');}}
@@ -830,6 +858,8 @@ async function localizaEndereco(txt,cidade){
       const pb=await centroBairro(bairroCo,cidade);
       if(pb)return {...base,cand:mkCand(pb.lat,pb.lon,'bairro',bairroCo,{audit:['a rua não aparece no mapa: ponto no bairro '+bairroCo+' (aproximado)'],dica:'Essa rua ainda não aparece no mapa: o pino ficou no bairro '+bairroCo+'. Se souber o lugar exato, toca no mapa 😉'},base)};
     }
+    const sug=await sugereRuas(rua,cidade);
+    if(sug.length)return {...base,sugestoes:sug};
     return {...base,nada:true};
   }
   const opcoes=gs=>({...base,opcoes:gs.map(g=>{const m=meio(g);return mkCand(m.lat,m.lon,'opcao',m.bairro,avisosGrupo(g,num,false),base,m.rua);})});
@@ -855,6 +885,10 @@ async function buscarEndereco(){
   const txt=document.getElementById('locRua').value,cidade=document.getElementById('locCidade').value;
   const {rua,num}=separaNumero(txt);
   if(letras(rua)<3){mostraRes('Digita o <b>nome da rua</b> e o número, ex.: Rua Maria Carlota, 250 😉','alerta');document.getElementById('locRua').focus();return;}
+  return executaBusca(txt,cidade,'');
+}
+async function executaBusca(txt,cidade,digitado){
+  const {rua,num}=separaNumero(txt);
   limpaGaleria();est.gal.buscou=true;
   const seq=est.gal.seq,btn=document.getElementById('btnBuscar');
   btn.disabled=true;btn.textContent='Procurando no mapa… 🔎';
@@ -864,12 +898,24 @@ async function buscarEndereco(){
   try{r=await localizaEndereco(txt,cidade);}catch(x){r={erro:true};}
   if(seq!==est.gal.seq)return;
   btn.disabled=false;btn.textContent='🔎 Buscar no mapa';
-  if(r.opcoes){
+  if(digitado){
+    const nota='nome da rua corrigido pela sugestão dos Correios (digitado: "'+digitado+'")';
+    (r.opcoes||[]).concat(r.cand?[r.cand]:[]).forEach(c=>{c.avisos=(c.avisos||[]).concat(nota);});
+  }
+  if(r.sugestoes){
+    est.gal.sugestoes=r.sugestoes;
+    mostraRes('Não achamos <b>'+esc(r.rua)+'</b> em '+esc(r.cidade)+'. <b>Você quis dizer:</b>'+r.sugestoes.map((s,i)=>'<button class="loc-opcao" type="button" onclick="escolheSugestao('+i+')">📍 '+esc(s.nome)+' · <b>'+esc(s.bairro||'bairro não informado')+'</b></button>').join('')+'<button class="loc-opcao" type="button" onclick="naoEAqui()">Não é nenhuma dessas</button>','alerta');
+  }else if(r.opcoes){
     est.gal.opcoes=r.opcoes;
     const rot=r.opcoes.map(o=>o.bairro||'bairro não informado');
     mostraRes('Achamos mais de uma <b>'+esc(r.rua)+'</b> em '+esc(r.cidade)+'. <b>Qual delas?</b>'+r.opcoes.map((o,i)=>'<button class="loc-opcao" type="button" onclick="escolheOpcao('+i+')">📍 '+esc(o.rua)+' · <b>'+esc(rot[i])+(rot.indexOf(rot[i])!==rot.lastIndexOf(rot[i])?' ('+(i+1)+')':'')+'</b></button>').join('')+'<button class="loc-opcao" type="button" onclick="naoEAqui()">Não é nenhuma dessas</button>');
   }else if(r.cand)propoe(r.cand);
   else naoAchado(!!r.erro);
+}
+function escolheSugestao(i){
+  const s=est.gal.sugestoes&&est.gal.sugestoes[i];if(!s)return;
+  const {rua,num}=separaNumero(document.getElementById('locRua').value);
+  executaBusca(s.nome+(num!=null?', '+num:''),document.getElementById('locCidade').value,rua+(num!=null?', '+num:''));
 }
 document.getElementById('locRua').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();buscarEndereco();}});
 ['input','change'].forEach(ev=>['locRua','locCidade'].forEach(id=>document.getElementById(id).addEventListener(ev,()=>{
@@ -884,6 +930,7 @@ function validaLocalGaleria(){
   if(est.gal.conf)return letras(ref)<5?semRef:'';
   if(est.gal.cand)return 'Confirma o local no mapa: toca em <b>✅ Sim, é aqui</b> 😉';
   if(est.gal.opcoes)return 'Escolhe qual das ruas é a certa, logo abaixo do mapa 😉';
+  if(est.gal.sugestoes)return 'Escolhe uma das sugestões de rua, ou toca em <b>Não é nenhuma dessas</b> 😉';
   if(est.gal.naoAchou){if(letras(rua)<3)return 'Digita a rua e o número do local, ex.: Rua Maria Carlota, 250.';return letras(ref)<5?semRef:'';}
   return 'Conta onde foi 📍 Digita a rua e o número e toca em <b>Buscar no mapa</b> (ou em <b>Estou no local agora</b>).';
 }
