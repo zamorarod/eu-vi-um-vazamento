@@ -220,7 +220,7 @@
     <button class="btn" onclick="reiniciar()">Registrar outra ocorrência</button>
   </div>
 </main>
-<footer>Eu vi um Vazamento · uso interno Sabesp<br>versão 2.6 · 07/10/2026</footer>
+<footer>Eu vi um Vazamento · uso interno Sabesp<br>versão 2.6.1 · 18/10/2026</footer>
 <div id="visor" class="oculta" onclick="this.classList.add('oculta')">
   <img alt="foto ampliada">
   <div class="dica">A data, a hora e a posição ficam gravadas na parte de baixo da foto</div>
@@ -954,7 +954,7 @@ async function carimbaGaleria(){
     const fh=Math.max(20,Math.round(Math.min(c.width,c.height)*0.042));
     g.font='700 '+fh+'px system-ui,sans-serif';
     const maxw=c.width-fh*1.2;
-    const corta=s=>{let x=s;while(x.length>8&&g.measureText(x+'…').width>maxw)x=x.slice(0,-2);return x===s?s:x.trimEnd()+'…';};
+    const corta=s=>{if(g.measureText(s).width<=maxw)return s;let x=s;while(x.length>8&&g.measureText(x+'…').width>maxw)x=x.slice(0,-2);return x===s?s:x.trimEnd()+'…';};
     const linhas=['Foto da galeria · '+dataDaFoto(f),(aConfirmar()?'Local informado (a confirmar): ':'Local informado: ')+local];
     if(ref)linhas.push('Ref.: '+ref);
     const quebra=(s,max)=>{
