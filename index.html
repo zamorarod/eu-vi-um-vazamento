@@ -171,7 +171,7 @@
   <button class="btn-gps" id="btnGpsMapa" onclick="pedirGps(false)">📍 Usar minha localização</button>
   <div class="endereco" id="boxEnd"><span class="pin">📍</span><span id="endTxt">Estamos te procurando no mapa…</span></div>
   <div class="loc-res oculta" id="locRes"></div>
-  <div class="erro-msg" id="foraPiloto">🧭 Este ponto está fora da área do piloto (UN Leste). Confere se o pino está no lugar certo.</div>
+  <div class="erro-msg" id="foraPiloto">🧭 Este ponto está fora da área atendida (UN Leste). Confere se o pino está no lugar certo.</div>
   <div class="destino fora" id="avisoDist" style="display:none">📏 <span></span></div>
   <div id="diag" style="display:none;font-size:11.5px;color:var(--sutil);margin-top:-8px;padding-left:4px"></div>
   <div>
@@ -216,11 +216,10 @@
     <div class="protocolo" id="protoTxt">VAZ-2026-000000</div>
     <div class="recibo-det" id="reciboDet"></div>
     <div class="status-ok">📬 E-mail enviado com as fotos</div>
-    <div class="aviso-proto">FASE DE TESTE: neste período os avisos vão para os e-mails da equipe do piloto, já com o polo responsável indicado.</div>
     <button class="btn" onclick="reiniciar()">Registrar outra ocorrência</button>
   </div>
 </main>
-<footer>Eu vi um Vazamento · uso interno Sabesp<br>versão 2.6.1 · 18/10/2026</footer>
+<footer>Eu vi um Vazamento · uso interno Sabesp<br>versão 2.7 · 31/10/2026</footer>
 <div id="visor" class="oculta" onclick="this.classList.add('oculta')">
   <img alt="foto ampliada">
   <div class="dica">A data, a hora e a posição ficam gravadas na parte de baixo da foto</div>
@@ -823,7 +822,7 @@ function agrupa(its,lim){
 function meio(g){const la=g.reduce((s,o)=>s+o.lat,0)/g.length,lo=g.reduce((s,o)=>s+o.lon,0)/g.length;return g.reduce((b,o)=>distanciaM(o.lat,o.lon,la,lo)<distanciaM(b.lat,b.lon,la,lo)?o:b,g[0]);}
 function extensao(g){let m=0;for(const a of g)for(const b of g)m=Math.max(m,distanciaM(a.lat,a.lon,b.lat,b.lon));return m;}
 function juntaMesmoBairro(gs){const m=new Map();gs.forEach((g,i)=>{const k=baseBairro(meio(g).bairro)||('#'+i);if(!m.has(k))m.set(k,[]);m.get(k).push(...g);});return [...m.values()];}
-function polosDe(g){return [...new Set(g.map(o=>{const p=poloDoPonto(o.lat,o.lon);return p?'Polo '+p.nome:'fora do piloto';}))];}
+function polosDe(g){return [...new Set(g.map(o=>{const p=poloDoPonto(o.lat,o.lon);return p?'Polo '+p.nome:'fora da área atendida';}))];}
 function avisosGrupo(g,num,localizado){
   const audit=[];let dica='';
   if(!localizado&&extensao(g)>1500){
@@ -1048,7 +1047,7 @@ function atualizaDestino(){
   const d=document.getElementById('destinoPolo');
   if(aConfirmar()){d.classList.add('fora');d.innerHTML='🧭 <span>Não achamos o endereço no mapa. O aviso segue com o endereço e a referência, e a equipe confere o Polo, tá bom?</span>';return;}
   if(est.polo){d.classList.remove('fora');d.innerHTML='📬 <span>Este aviso aciona: <b>Polo '+esc(est.polo.nome)+'</b></span>';}
-  else{d.classList.add('fora');d.innerHTML='🧭 <span>Ponto fora da área do piloto (UN Leste). O aviso vai para a central do teste, tá bom?</span>';}
+  else{d.classList.add('fora');d.innerHTML='🧭 <span>Ponto fora da área atendida (UN Leste). O aviso vai para a central, que confere o local, tá bom?</span>';}
 }
 function validaRegistro(nome,fone,unidade){
   const palavras=nome.split(/\s+/).filter(p=>p.replace(/[^A-Za-zÀ-ÿ]/g,'').length>=2);
@@ -1091,7 +1090,7 @@ async function enviar(){
   const semMapa=aConfirmar();
   if(!est.polo&&!semMapa&&!est.foraConfirmado){
     est.foraConfirmado=true;
-    erro3.textContent='Este ponto está fora da área coberta pelo piloto (UN Leste) 🧭 Confere o pino no mapa. Se o local estiver certo mesmo, toca em Enviar de novo que a gente registra assim.';
+    erro3.textContent='Este ponto está fora da área coberta pelo app (UN Leste) 🧭 Confere o pino no mapa. Se o local estiver certo mesmo, toca em Enviar de novo que a gente registra assim.';
     erro3.style.display='block';
     return;
   }
@@ -1172,7 +1171,7 @@ async function enviar(){
   const linhas=[
     ['Tipo', TIPOS[est.tipo]?TIPOS[est.tipo].recibo:String(est.tipo)],
     ['Local', pacote.local],
-    ['Polo acionado', semMapa?'a confirmar pela equipe':(est.polo?est.polo.nome:'fora da área do piloto')],
+    ['Polo acionado', semMapa?'a confirmar pela equipe':(est.polo?est.polo.nome:'fora da área atendida')],
     ['Região', semMapa?'a confirmar':(est.un?est.un.nome+' ('+est.un.sigla+')':'fora da UN Leste')],
     ['Fotos', fotos+' foto'+(fotos>1?'s':'')+(nGal?(nGal===fotos?' da galeria':' ('+nGal+' da galeria)'):' com data e hora')],
     ['Registrado em', quando],
@@ -1183,7 +1182,7 @@ async function enviar(){
     ?'Aviso enviado! A equipe confere o endereço e aciona o Polo. Guarde o número do protocolo:'
     :est.polo
     ?'O polo responsável acabou de receber por e-mail. Guarde o número do protocolo:'
-    :'Aviso enviado à equipe do piloto para conferência do local. Guarde o número do protocolo:';
+    :'Aviso enviado à central para conferência do local. Guarde o número do protocolo:';
   irPara3Original(4);
 }
 function reiniciar(){
