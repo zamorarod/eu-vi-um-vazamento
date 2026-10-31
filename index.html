@@ -21,7 +21,6 @@
   body{font:17.5px/1.55 var(--texto);color:var(--ink);background:#D8DEE1}
   #tela{max-width:480px;margin:0 auto;min-height:100vh;background:var(--papel);display:flex;flex-direction:column;position:relative}
   header{background:var(--branco);color:var(--ink);padding:14px 20px 12px;border-bottom:4px solid var(--sabesp);display:flex;align-items:center;gap:14px}
-  header .marca{height:48px;flex:0 0 auto}
   header h1{font:800 23px/1.1 var(--display);margin:0;letter-spacing:-.01em}
   header .sub{font-size:14px;color:var(--sutil);margin-top:2px}
   .btn-gps{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border:1.5px solid var(--acento);border-radius:12px;background:var(--branco);color:var(--acento);font:600 17px var(--texto);cursor:pointer}
@@ -110,17 +109,16 @@
 <body>
 <div id="tela">
 <header>
-  <img class="marca" id="marcaTopo" alt="Sabesp" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgd2lkdGg9IjE5NSIKICAgaGVpZ2h0PSIyNjkiCiAgIHZpZXdCb3g9IjcuNSAxMyAxOTUgMjY5IgogICBpZD0ic3ZnOCI+CiAgPHBhdGgKICAgICBpZD0icGF0aDQyODMiCiAgICAgc3R5bGU9ImZpbGw6IzAwOTNkZDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MC4yNjEzMzVweDtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgIGQ9Im0gMjAxLjIwMjQ2LDY2LjQyOTY0NiAwLjAzNzksLTIuOTQ0ODQ0IFYgMTkuNjI2NzMzIGMgMCwwIC00MS4wNjUxNCwtMTUuNjA2MDg1MSAtNzcuNzg1MDksNS42NzI2NDEgLTM2LjcxOTkzNCwyMS4yNzg3MTcgLTQyLjkwNTUzOCw0OC44MDMyOTggLTQyLjkwNTUzOCw0OC44MDMyOTggMCwwIC01LjgyMjI4NiwyMC41OTg3NzIgLTYuNjAzMjk5LDI4LjM2NzI5OCAtMC43ODEwMTMsNy43Njg1MyAtMC42MjY5NTEsNy40MjkyIC0wLjYyNjk1MSw3LjQyOTIgbCAwLjA1NTMzLDAuNzg1NzkgLTAuMDY2MjIsMS4xMDU2MSBIIDIwMC45ODMzNSBjIC0yOC42OTM5LC0xMC4yNDU3NCAtMzkuOTE0MTIsLTE0LjQ2MDc4MSAtNTMuMzY4MDcsLTI2LjExNDY5NSAtMTcuMzg2MzYsLTE2LjU0NTM0MSAtMTAuNDUxOTksLTM0LjAxNTMxIC00LjEwNTMsLTQyLjIwMzgxNSAxMy44NTg5LC0xNy44ODA3OTYgMzguNDAxNjMsLTE0LjE4NDgzOSA0OC43Mjk1OCwzLjIwMzQzNSAxLjYwMzUzLDIuNjk5NzIxIDMuMjMyMTMsNS4zMjI2MjMgNC4xMjQ0LDcuMjY4MzY2IDIuNTE0NzgsNC4yMjQyMjkgMy41OTU1NCw3LjIwNjI1MyA0LjgzODUsMTIuNDg1Nzg1IHogTSA4LjUzODY2MjcsMTQuMTg4NzcgdiAxMDUuMTE4NDkgYyAwLDAgMC4wOTQzMDMsMS45ODY0MSAwLjU3OTM4OTgsNS4zNzc5NCAyLjIzNzg0MTUsMTUuNjQ2MDcgMTIuNzkyNDg4NSw2MS4xOTY1IDYwLjc3MjkwMjUsNzkuNTgwMyA1My4yMjUzODUsMjAuMzkzNDMgOTguODQwMjA1LC0xMC4yNDcgMTE3Ljc5OTQ2NSwtNDIuMzMxOTQgMTIuMTEyNzgsLTIwLjQ5ODU3IDEzLjEzNjYxLC00Ni45MTY0NCAxMy4xMzY2MSwtNDYuOTE2NDQgdiAwIEggNzMuNjc2ODMxIGMgMCwwIDAuNTQxOTgsMS4wNzU4NCAxLjUwMzYzMiwxLjUyMDY0IDUuMTk3NDI1LDIuNDAzOTggMjIuNjA4MzIsOS43NDQ1NCAzMy4wNTg4NzcsMTQuMzEwOTkgMjAuNDYyMTgsOC45NDExIDI1LjM0MTkzLDEzLjg4MDU0IDI3LjYzOTk3LDI1LjI2NjcyIDMuMTc2MDcsMTUuNzM2NjYgLTYuMDQ3NiwyNS40MjYwOSAtOS4yNDg0OCwyOC41MTE3MSAtOC42NDIxNCw4LjMzMDk1IC0xNS4xMTc3LDguNjE3IC0yMy4xMjMzNiw4LjcyMjUgLTIwLjU4NTk4NCwwLjI3MTI3IC0yOS41MDYxMywtMTYuNDQ0MzIgLTMwLjM1MDQ1LC0yNi44OTMxNyAtMC4zNzY2MzcsLTQuNjYxMDMgMCwtMTUyLjE4MDIyMiAwLC0xNTIuMTgwMjIyIHoiIC8+CiAgPGcKICAgICB0cmFuc2Zvcm09Im1hdHJpeCgxLjA1NDkzMjYsMCwwLDEuMDQ5ODYsLTYuMTc2NzUyMywtNi4yNzg1NjExKSIKICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LXNpemU6NTYuNDQ4cHg7Zm9udC1mYW1pbHk6J0ZvbGlvIE1kIEJUJzstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOidGb2xpbyBNZCBCVCc7ZmlsbDojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjY5ODciCiAgICAgaWQ9InRleHQ0MzM1Ij4KICAgIDxwYXRoCiAgICAgICBpZD0icGF0aDQzOTkiCiAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LWZhbWlseTonRm9saW8gTWQgQlQnOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246J0ZvbGlvIE1kIEJUJztmaWxsOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuNjk4NyIKICAgICAgIGQ9Im0gMTc0Ljc0MTUsMjU5LjAzMTM0IDAuMDU1MSwxNS4yOTcxOSBoIC02LjAzNjE5IFYgMjM2LjU2NzkgaCA1Ljk4MTA3IGwgLTAuMTM3ODIsNC42ODU2MiBxIDEuMzIzLC0yLjg5NDA2IDMuNjM4MjUsLTQuMzI3MzEgMi4zMTUyNiwtMS40MzMyNSA1LjYyMjc2LC0xLjQzMzI1IDQuOTMzNjksMCA4LjIxMzYyLDQuMDUxNjkgMy4zMDc1MSw0LjAyNDEyIDMuMzA3NTEsMTAuMTcwNTYgMCw2LjIyOTEzIC0zLjI3OTk0LDEwLjIyNTY5IC0zLjI3OTk0LDMuOTk2NTcgLTguMjk2MzIsMy45OTY1NyAtMy4wMDQzMSwwIC01LjI5MiwtMS4yMTI3NSAtMi4yNjAxMywtMS4yNDAzMiAtMy43NzYwNiwtMy42OTMzOCB6IG0gNy4wNTYsLTE4Ljg1Mjc2IHEgLTMuMjI0ODIsMCAtNS4xODE3NSwyLjYxODQ0IC0xLjkyOTM4LDIuNjE4NDQgLTEuOTI5MzgsNy4wMjg0NCAwLDQuMzU0ODggMS45NTY5NCw3LjAwMDg4IDEuOTg0NSwyLjY0NiA1LjE1NDE5LDIuNjQ2IDMuMTk3MjUsMCA1LjIwOTMxLC0yLjY0NiAyLjAxMjA3LC0yLjY3MzU2IDIuMDEyMDcsLTYuOTQ1NzUgMCwtNC4yNzIxOSAtMi4wNjcxOSwtNi45NzMzMiAtMi4wMzk2MywtMi43Mjg2OSAtNS4xNTQxOSwtMi43Mjg2OSB6IG0gLTE5Ljg3MjU3LDQuMTA2ODIgaCAtNS42NTAzMiBxIC0wLjA4MjcsLTIuMzE1MjUgLTEuNjI2MTksLTMuNTU1NTcgLTEuNTQzNSwtMS4yNDAzMSAtNC40MSwtMS4yNDAzMSAtMi41MzU3NSwwIC00LjA3OTI1LDAuOTkyMjUgLTEuNTE1OTQsMC45OTIyNSAtMS41MTU5NCwyLjU2MzMyIDAsMi43MDExMiA3LjEzODY5LDQuMTA2ODEgbCAwLjEzNzgyLDAuMDI3NiBxIDYuNDc3MTksMS4yOTU0NCA4LjQzNDEyLDIuOTc2NzUgMS45NTY5NCwxLjY4MTMyIDEuOTU2OTQsNC45NjEyNSAwLDQuMTg5NTEgLTIuOTQ5MTksNi40NzcxOSAtMi45MjE2MiwyLjI4NzY5IC04LjMyMzg3LDIuMjg3NjkgLTYuMDM2MTksMCAtOS4yMDU4OCwtMi4yODc2OSAtMy4xNDIxMywtMi4yODc2OCAtMy43MjA5NCwtNy4wMjg0NCBoIDUuODQzMjUgcSAwLjA1NTEsMi41MzU3NSAxLjg3NDI1LDMuOTQxNDQgMS44NDY2OSwxLjM3ODEzIDUuMjA5MzIsMS4zNzgxMyAyLjU5MDg3LDAgNC4wNzkyNSwtMC45OTIyNSAxLjQ4ODM3LC0xLjAxOTgyIDEuNDg4MzcsLTIuNzU2MjUgMCwtMi40NTMwNyAtNi4wMDg2MiwtMy43MjA5NCAtMC43OTkzMiwtMC4xNjUzOCAtMS4yNjc4OCwtMC4yNzU2MyAtNi4xNDY0NCwtMS4zNzgxMiAtOC4xMDMzOCwtMy4xNDIxMiAtMS45MjkzNywtMS43NjQgLTEuOTI5MzcsLTUuMTU0MTkgMCwtMy45NDE0NCAyLjg2NjUsLTYuMTQ2NDQgMi44NjY1LC0yLjIwNSA4LjAyMDY5LC0yLjIwNSA1LjU0MDA2LDAgOC41NzE5NCwyLjI4NzY5IDMuMDMxODcsMi4yNjAxMiAzLjE2OTY5LDYuNTA0NzUgeiBtIC0yNy44MTA1Nyw2LjcyNTI1IGggLTIxLjM4ODUxIHEgMC4yMjA1LDQuMDUxNjkgMi40MjU1LDYuMjg0MjUgMi4yMzI1NywyLjIzMjU3IDUuOTgxMDcsMi4yMzI1NyAyLjM0MjgxLDAgNC4xMDY4MSwtMS4wNDczOCAxLjc2NCwtMS4wNDczOCAyLjY3MzU2LC0yLjk0OTE5IGggNS45ODEwNyBxIC0xLjMyMywzLjk2OSAtNC42MDI5NCw2LjE3NCAtMy4yNTIzOCwyLjE3NzQ0IC03LjgyNzc1LDIuMTc3NDQgLTYuODM1NSwwIC0xMC43NzY5NCwtMy44MDM2MiAtMy45NDE0NCwtMy44MzExOSAtMy45NDE0NCwtMTAuMzYzNTEgMCwtNi4zMzkzNyAzLjgzMTE5LC0xMC4yODA4MSAzLjg1ODc1LC0zLjk0MTQ0IDEwLjExNTQ0LC0zLjk0MTQ0IDYuMzY2OTQsMCA5Ljg5NDk0LDMuNzc2MDYgMy41MjgsMy43NzYwNyAzLjUyOCwxMC42NjY2OSB6IG0gLTYuMTQ2NDQsLTQuMDUxNjkgcSAtMC4zODU4OCwtMy41ODMxMiAtMi4zNzAzOCwtNS41MTI1IC0xLjk4NDUsLTEuOTU2OTQgLTUuMjY0NDQsLTEuOTU2OTQgLTIuOTc2NzUsMCAtNS4wNzE1LDIuMDEyMDYgLTIuMDk0NzUsMS45ODQ1MSAtMi43MDExMiw1LjQ1NzM4IHogbSAtMzkuMDAwOTUsLTcuMDU2IHEgLTMuMTY5Njg4LDAgLTUuMTU0MTg5LDIuNjE4NDQgLTEuOTU2OTM4LDIuNjE4NDQgLTEuOTU2OTM4LDYuOTE4MTkgMCw0LjQzNzU2IDEuOTI5Mzc2LDcuMTExMTIgMS45NTY5MzgsMi42NDYgNS4xODE3NTEsMi42NDYgMy4xMTQ1NjQsMCA1LjE1NDE4OSwtMi43Mjg2OCAyLjA2NzE4OCwtMi43Mjg2OSAyLjA2NzE4OCwtNi45NzMzMiAwLC00LjMyNzMxIC0yLjAxMjA2MywtNi45NDU3NSAtMS45ODQ1LC0yLjY0NiAtNS4yMDkzMTQsLTIuNjQ2IHogTSA3NS45Mjk5MDQsMjIyLjU2NjE0IGggNi4wMzYxODkgbCAtMC4wNTUxMywxNy43Nzc4MiBxIDEuNTE1OTM4LC0yLjQ4MDYzIDMuNzc2MDY0LC0zLjY5MzM4IDIuMjg3Njg4LC0xLjIxMjc1IDUuMzQ3MTI2LC0xLjIxMjc1IDQuOTYxMjUyLDAgOC4yNDExOSw0LjAyNDEzIDMuMjc5OTQ3LDMuOTk2NTYgMy4yNzk5NDcsMTAuMTk4MTMgMCw2LjE0NjQ0IC0zLjMzNTA3MiwxMC4xOTgxMyAtMy4zMDc1MDEsNC4wMjQxMiAtOC4yOTYzMTUsNC4wMjQxMiAtMy4yNzk5MzgsMCAtNS41Njc2MjYsLTEuNDYwODEgLTIuMjg3Njg5LC0xLjQ2MDgxIC0zLjU4MzEyNywtNC4zNTQ4OCBsIDAuMTM3ODEzLDQuNzQwNzUgaCAtNS45ODEwNjQgeiBtIC0xNC4yNzczODIsMjUuMzI5OTUgcSAtMS4zNzgxMjUsMS40ODgzNyAtNS44NzA4MTQsMi4zNzAzNyAtMC45NjQ2ODgsMC4xOTI5NCAtMS40NjA4MTMsMC4zMDMxOSAtMy4wODcwMDEsMC42NjE1IC00LjMyNzMxNCwxLjczNjQ0IC0xLjIxMjc1LDEuMDc0OTQgLTEuMjEyNzUsMy4wMDQzMSAwLDIuMDM5NjMgMS4zNzgxMjUsMy4yNzk5NCAxLjM3ODEyNSwxLjIxMjc1IDMuNjkzMzc2LDEuMjEyNzUgMy44ODYzMTQsMCA1Ljg5ODM3NywtMi4zOTc5NCAyLjAxMjA2MywtMi40MjU1IDIuMDEyMDYzLC03LjEzODY5IDAsLTAuNjYxNSAtMC4xMTAyNSwtMi4yMDUgeiBtIDUuODE1Njg5LC0xLjUxNTk0IHYgOS40ODE1IHEgMCwyLjA5NDc1IDAuMjc1NjI1LDMuODAzNjMgMC4zMDMxODgsMS42ODEzMSAwLjkwOTU2MywzLjE0MjEyIEggNjIuMzk2NzEgcSAtMC4yNDgwNjMsLTAuOTM3MTIgLTAuMzg1ODc1LC0xLjkwMTgxIC0wLjEzNzgxMywtMC45OTIyNSAtMC4xOTI5MzgsLTIuMDk0NzUgLTIuMDY3MTg4LDIuNjE4NDQgLTQuNDM3NTY0LDMuODU4NzUgLTIuMzcwMzc1LDEuMjEyNzUgLTUuMzE5NTY0LDEuMjEyNzUgLTQuMjcyMTg5LDAgLTYuODM1NTAyLC0yLjM0MjgxIC0yLjUzNTc1MSwtMi4zNDI4MiAtMi41MzU3NTEsLTYuMjI5MTMgMCwtMS42NTM3NSAwLjUyMzY4OCwtMy4wMDQzMSAwLjUyMzY4OCwtMS4zNzgxMyAxLjU3MTA2MywtMi40MjU1IDIuMTc3NDM4LC0yLjE0OTg4IDkuOTc3NjI4LC0yLjk0OTE5IDAuOTY0Njg4LC0wLjExMDI1IDEuNDYwODEzLC0wLjE2NTM4IDIuODk0MDYzLC0wLjMwMzE4IDQuMTA2ODE0LC0xLjEzMDA2IDEuMjEyNzUsLTAuODU0NDQgMS4yMTI3NSwtMi40ODA2MiAwLC0xLjY1Mzc2IC0xLjQ4ODM3NSwtMi42NDYwMSAtMS40ODgzNzYsLTEuMDE5ODEgLTMuOTk2NTY0LC0xLjAxOTgxIC0yLjY3MzU2MywwIC00LjMyNzMxNCwxLjEzMDA2IC0xLjY1Mzc1LDEuMTAyNSAtMS45ODQ1MDEsMy4xMTQ1NyBoIC02LjA5MTMxNCBxIDAuODI2ODc1LC00LjEzNDM4IDMuODg2MzE0LC02LjE3NCAzLjA4NzAwMSwtMi4wNjcxOSA4LjM1MTQ0LC0yLjA2NzE5IDYuMjI5MTI3LDAgOC45MDI2OSwyLjUwODE5IDIuNjczNTYzLDIuNTA4MTggMi42NzM1NjMsOC4zNzkgeiBNIDM3Ljg5MzYzOSwyNDQuMjg1NCBoIC01LjY1MDMxNCBxIC0wLjA4MjY5LC0yLjMxNTI1IC0xLjYyNjE4OCwtMy41NTU1NyAtMS41NDM1MDEsLTEuMjQwMzEgLTQuNDEwMDAyLC0xLjI0MDMxIC0yLjUzNTc1LDAgLTQuMDc5MjUxLDAuOTkyMjUgLTEuNTE1OTM4LDAuOTkyMjUgLTEuNTE1OTM4LDIuNTYzMzIgMCwyLjcwMTEyIDcuMTM4NjksNC4xMDY4MSBsIDAuMTM3ODEyLDAuMDI3NiBxIDYuNDc3MTksMS4yOTU0NCA4LjQzNDEyOCwyLjk3Njc1IDEuOTU2OTM4LDEuNjgxMzIgMS45NTY5MzgsNC45NjEyNSAwLDQuMTg5NTEgLTIuOTQ5MTg4LDYuNDc3MTkgLTIuOTIxNjI2LDIuMjg3NjkgLTguMzIzODc4LDIuMjg3NjkgLTYuMDM2MTg5LDAgLTkuMjA1ODc4LC0yLjI4NzY5IC0zLjE0MjEyNiwtMi4yODc2OCAtMy43MjA5MzgsLTcuMDI4NDQgaCA1Ljg0MzI1MiBxIDAuMDU1MTMsMi41MzU3NSAxLjg3NDI1LDMuOTQxNDQgMS44NDY2ODgsMS4zNzgxMyA1LjIwOTMxNCwxLjM3ODEzIDIuNTkwODc2LDAgNC4wNzkyNTEsLTAuOTkyMjUgMS40ODgzNzYsLTEuMDE5ODIgMS40ODgzNzYsLTIuNzU2MjUgMCwtMi40NTMwNyAtNi4wMDg2MjcsLTMuNzIwOTQgLTAuNzk5MzEzLC0wLjE2NTM4IC0xLjI2Nzg3NSwtMC4yNzU2MyAtNi4xNDY0NCwtMS4zNzgxMiAtOC4xMDMzNzgsLTMuMTQyMTIgLTEuOTI5Mzc1LC0xLjc2NCAtMS45MjkzNzUsLTUuMTU0MTkgMCwtMy45NDE0NCAyLjg2NjUsLTYuMTQ2NDQgMi44NjY1MDEsLTIuMjA1IDguMDIwNjksLTIuMjA1IDUuNTQwMDY1LDAgOC41NzE5NDEsMi4yODc2OSAzLjAzMTg3NSwyLjI2MDEyIDMuMTY5Njg4LDYuNTA0NzUgeiIgLz4KICA8L2c+Cjwvc3ZnPgo=">
   <div>
     <h1>Eu vi um Vazamento</h1>
-    <div class="sub">Registro rápido de ocorrência <span class="junto">em campo 💙</span></div>
+    <div class="sub">Registro rápido de ocorrência <span class="junto">em campo</span></div>
   </div>
 </header>
 
 <!-- TELA 1: tipo -->
 <main id="t1">
-  <h2 style="text-align:center">O que você encontrou <span class="junto">aí? 👀</span></h2>
-  <p class="ajuda" style="text-align:center">Leva menos de 1 minuto. É só tocar em uma das <span class="junto">opções 👇</span></p>  <button class="cartaozao agua" data-tipo="água" onclick="escolher('água')">
+  <h2 style="text-align:center">O que você <span class="junto">encontrou?</span></h2>
+  <p class="ajuda" style="text-align:center">Leva menos de 1 minuto. Toque em uma das <span class="junto">opções.</span></p>  <button class="cartaozao agua" data-tipo="água" onclick="escolher('água')">
     <span class="icone"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5C12 2.5 5.5 10.2 5.5 14.8a6.5 6.5 0 0 0 13 0C18.5 10.2 12 2.5 12 2.5Z" fill="#0093DD"/><path d="M9.2 15.1a2.9 2.9 0 0 0 2.3 2.9" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg></span>
     <span><b>Vazamento de água</b><span>Água limpa escorrendo pela rua ou calçada</span></span>
   </button>
@@ -130,7 +128,7 @@
   </button>
   <button class="cartaozao vala" data-tipo="vala" onclick="escolher('vala')">
     <span class="icone"><svg viewBox="0 0 24 24" fill="none"><path d="M2.5 5h6l2.2 9.5h2.6L15.5 5h6" stroke="#C9720E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M9.3 17.5c1-.8 1.8-.8 2.7 0 .9.8 1.8.8 2.7 0" stroke="#0093DD" stroke-width="1.8" stroke-linecap="round" fill="none"/><path d="M8.9 20c1.2-.8 2-.8 3.1 0 1 .8 2 .8 3.1 0" stroke="#0093DD" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".55"/></svg></span>
-    <span><b>Vala</b><span>Registro de ocorrência com Vala</span></span>
+    <span><b>Vala</b><span>Registro de ocorrência com vala</span></span>
   </button>
   <button class="cartaozao pv" data-tipo="pv" onclick="escolher('pv')">
     <span class="icone"><svg viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="16.5" rx="8.5" ry="3.2" fill="#4A5560"/><ellipse cx="12" cy="15.6" rx="8.5" ry="3.2" fill="#6B7680" stroke="#3A444E" stroke-width="1"/><ellipse cx="10.6" cy="9.4" rx="7.6" ry="2.9" fill="#8C97A1" stroke="#3A444E" stroke-width="1.2" transform="rotate(-14 10.6 9.4)"/><path d="M5.4 8.2c1.5-.9 8-1.4 10.3-.2" stroke="#3A444E" stroke-width=".9" transform="rotate(-14 10.6 9.4)"/><path d="M20 4.5l1.6 2.8M21.6 4.7l-2 2.4" stroke="#C0392B" stroke-width="1.7" stroke-linecap="round"/></svg></span>
@@ -140,19 +138,19 @@
 
 <!-- TELA 2: foto e local -->
 <main id="t2" class="oculta">
-  <h2>Agora, uma foto e o lugar <span class="junto">certinho 📸</span></h2>
-  <p class="ajuda">Tira até 2 fotos na hora (já saem com data, hora e endereço) ou escolhe da galeria. Confere se o pino está bem em cima da ocorrência: se o GPS errar por alguns metros, ajusta com cuidado.</p>
+  <h2>Foto e local da <span class="junto">ocorrência</span></h2>
+  <p class="ajuda">Tire até 2 fotos na hora (elas saem com data, hora e endereço) ou escolha da galeria. Confira se o pino está sobre o local da ocorrência e, se o GPS errar por alguns metros, ajuste o pino com cuidado.</p>
   <div class="fotos">
     <div class="foto-slot" id="slot0" role="button" tabindex="0" onclick="abrirCamera(0)"><span class="cam">📷</span><span>Tirar a foto</span></div>
-    <div class="foto-slot" id="slot1" role="button" tabindex="0" onclick="abrirCamera(1)"><span class="cam">📷</span><span>Mais uma foto<br>(se quiser)</span></div>
+    <div class="foto-slot" id="slot1" role="button" tabindex="0" onclick="abrirCamera(1)"><span class="cam">📷</span><span>Mais uma foto<br>(opcional)</span></div>
   </div>
   <input type="file" id="cam" accept="image/*" capture="environment" class="oculta">
   <input type="file" id="gal" accept="image/*" multiple class="oculta">
   <button class="btn-gal" id="btnGaleria" type="button" onclick="abrirGaleria()">🖼️ Escolher da galeria <span style="font-weight:400">(até 2 fotos)</span></button>
   <div class="erro-msg" id="erroFoto"></div>
   <div class="bloco-local oculta" id="blocoLocal">
-    <h3>Onde foi <span class="junto">isso? 📍</span></h3>
-    <p class="ajuda">Como a foto veio da galeria, conta pra gente o lugar. A equipe usa o endereço e a referência para chegar certinho.</p>
+    <h3>Endereço da <span class="junto">ocorrência</span></h3>
+    <p class="ajuda">Como a foto veio da galeria, informe o local. A equipe usa o endereço e a referência para chegar ao ponto exato.</p>
     <div>
       <label for="locRua">Rua e número</label>
       <input type="text" id="locRua" maxlength="100" placeholder="Ex.: Rua Maria Carlota, 250" autocomplete="off" enterkeyhint="search">
@@ -170,30 +168,30 @@
   </div>
   <div id="mapa"></div>
   <button class="btn-gps" id="btnGpsMapa" onclick="pedirGps(false)">📍 Usar minha localização</button>
-  <div class="endereco" id="boxEnd"><span class="pin">📍</span><span id="endTxt">Estamos te procurando no mapa…</span></div>
+  <div class="endereco" id="boxEnd"><span class="pin">📍</span><span id="endTxt">Localizando você no mapa…</span></div>
   <div class="loc-res oculta" id="locRes"></div>
-  <div class="erro-msg" id="foraPiloto">🧭 Este ponto está fora da área atendida (UN Leste). Confere se o pino está no lugar certo.</div>
+  <div class="erro-msg" id="foraPiloto">🧭 Este ponto está fora da área atendida (UN Leste). Confira se o pino está no local certo.</div>
   <div class="destino fora" id="avisoDist" style="display:none">📏 <span></span></div>
   <div id="diag" style="display:none;font-size:11.5px;color:var(--sutil);margin-top:-8px;padding-left:4px"></div>
   <div id="blocoNum">
-    <label for="numRef">Número mais próximo <span style="font-weight:400;color:var(--sutil)">(se der para ver)</span></label>
+    <label for="numRef">Número mais próximo <span style="font-weight:400;color:var(--sutil)">(se estiver visível)</span></label>
     <input type="text" id="numRef" inputmode="numeric" maxlength="12" placeholder="Ex.: 250" autocomplete="off" style="max-width:150px" oninput="digitouNumero()">
-    <p class="ajuda" id="numAjuda">Olha a fachada da casa ou do comércio em frente. Ajuda a equipe a chegar direto.</p>
+    <p class="ajuda" id="numAjuda">Veja o número na fachada da casa ou do comércio em frente. Isso ajuda a equipe a chegar direto ao local.</p>
   </div>
   <div>
-    <label for="obs">Quer contar mais alguma coisa? <span style="font-weight:400;color:var(--sutil)">(se quiser)</span></label>
-    <textarea id="obs" rows="2" placeholder="Ex.: está assim desde ontem, bem em frente à padaria"></textarea>
+    <label for="obs">Observações <span style="font-weight:400;color:var(--sutil)">(opcional)</span></label>
+    <textarea id="obs" rows="2" placeholder="Ex.: está assim desde ontem, em frente à padaria"></textarea>
   </div>
-  <div class="erro-msg" id="erro2">Ops, faltou a foto 📷 Tira pelo menos uma para continuar, combinado?</div>
-  <div class="erro-msg" id="erro2loc">Faltou marcar o lugar 📍 Toca em "Usar minha localização" ou arrasta o pino até o ponto do vazamento.</div>
+  <div class="erro-msg" id="erro2">Falta a foto. Tire pelo menos uma para continuar.</div>
+  <div class="erro-msg" id="erro2loc">Falta marcar o local. Toque em "Usar minha localização" ou arraste o pino até o ponto da ocorrência.</div>
   <button class="btn" onclick="irPara(3)">Continuar</button>
   <button class="btn fantasma" onclick="irPara(1)">‹ Voltar</button>
 </main>
 
 <!-- TELA 3: quem registra -->
 <main id="t3" class="oculta">
-  <h2>Quem está <span class="junto">registrando? 🙋</span></h2>
-  <p class="ajuda">Preenche uma vez e o app lembra. Nos próximos avisos é só conferir e enviar.</p>
+  <h2>Quem está <span class="junto">registrando?</span></h2>
+  <p class="ajuda">Preencha uma vez e o app guarda seus dados. Nos próximos avisos, basta conferir e enviar.</p>
   <div>
     <label for="nome">Seu nome</label>
     <input type="text" id="nome" placeholder="Nome e sobrenome" autocomplete="name">
@@ -206,10 +204,10 @@
     <label for="unidade">Sigla da sua unidade</label>
     <input type="text" id="unidade" placeholder="Ex.: GACE, OLMS" maxlength="7" autocapitalize="characters" oninput="this.value=this.value.toUpperCase()">
   </div>
-  <div class="destino" id="destinoPolo">📬 <span>Confirmando o polo responsável…</span></div>
-  <div class="nota-lgpd">🔒 <span>Seus dados identificam o registro e são usados só no tratamento desta ocorrência.</span></div>
-  <div class="erro-msg" id="erro3">Faltou preencher nome, telefone e unidade, tá bom?</div>
-  <button class="btn" id="btnEnviar" onclick="enviar()">Enviar meu aviso 💙</button>
+  <div class="destino" id="destinoPolo">📬 <span>Confirmando o Polo responsável…</span></div>
+  <div class="nota-lgpd">🔒 <span>Seus dados identificam o registro e são usados somente no tratamento desta ocorrência.</span></div>
+  <div class="erro-msg" id="erro3">Preencha nome, telefone e unidade.</div>
+  <button class="btn" id="btnEnviar" onclick="enviar()">Enviar aviso</button>
   <button class="btn fantasma" onclick="irPara(2)">‹ Voltar</button>
 </main>
 
@@ -217,15 +215,15 @@
 <main id="t4" class="oculta">
   <div class="recibo">
     <div class="check">✓</div>
-    <h2>Prontinho! Aviso <span class="junto">enviado 🎉</span></h2>
-    <p class="ajuda" id="reciboMsg" style="margin:0">O polo responsável acabou de receber por e-mail. Guarde o número do protocolo:</p>
+    <h2>Aviso <span class="junto">enviado</span></h2>
+    <p class="ajuda" id="reciboMsg" style="margin:0">O Polo responsável já recebeu o aviso por e-mail. Guarde o número do protocolo:</p>
     <div class="protocolo" id="protoTxt">VAZ-2026-000000</div>
     <div class="recibo-det" id="reciboDet"></div>
     <div class="status-ok">📬 E-mail enviado com as fotos</div>
     <button class="btn" onclick="reiniciar()">Registrar outra ocorrência</button>
   </div>
 </main>
-<footer>Eu vi um Vazamento · uso interno Sabesp<br>versão 2.8 · 31/10/2026</footer>
+<footer>Eu vi um Vazamento · uso interno Sabesp<br>versão 3.0 · 31/10/2026</footer>
 <div id="visor" class="oculta" onclick="this.classList.add('oculta')">
   <img alt="foto ampliada">
   <div class="dica">A data, a hora e a posição ficam gravadas na parte de baixo da foto</div>
@@ -381,7 +379,7 @@ async function refinaBairro(lat,lon,a,seq){
 function atualizaEndereco(msg){
   const chips=!est.gal.ativo||!!(est.gal.cand||est.gal.conf);
   const un=!chips?'':(est.polo?' <span class="chip-un">Polo '+est.polo.nome+'</span>':'')+(est.un?' <span class="chip-un">região '+est.un.nome+'</span>':'');
-  document.getElementById('endTxt').innerHTML=(msg?msg:(est.endereco?'<b>'+esc(est.endereco)+'</b>':'Arraste o pino até o ponto do vazamento'))+un;
+  document.getElementById('endTxt').innerHTML=(msg?msg:(est.endereco?'<b>'+esc(est.endereco)+'</b>':'Arraste o pino até o ponto da ocorrência'))+un;
   if(!msg)checaNumRua();
 }
 async function geoReversa(lat,lon){
@@ -416,13 +414,13 @@ async function diag(fase){
 }
 function pedirGps(automatico){
   if(!navigator.geolocation){
-    atualizaEndereco('Seu navegador não tem GPS. Toca no mapa para marcar o lugar do vazamento 😉');
+    atualizaEndereco('Seu navegador não tem GPS. Toque no mapa para marcar o local da ocorrência.');
     return;
   }
   if(emOutroApp&&!automatico){
-    atualizaEndereco('Parece que o link abriu dentro de outro aplicativo 😉 Toca nos três pontinhos no canto da tela e escolhe "Abrir no navegador" (Chrome ou Safari). Aí o GPS funciona. Enquanto isso, dá para tocar no mapa e marcar o lugar.');
+    atualizaEndereco('O link abriu dentro de outro aplicativo. Toque no menu de três pontos no canto da tela e escolha "Abrir no navegador" (Chrome ou Safari) para o GPS funcionar. Enquanto isso, você pode tocar no mapa e marcar o local.');
   }else{
-    atualizaEndereco(automatico?'Estamos te procurando no mapa…':'Ligando o GPS… pode levar alguns segundos 📡');
+    atualizaEndereco(automatico?'Localizando você no mapa…':'Ligando o GPS. Aguarde alguns segundos…');
   }
   diag('pedindo');
   const achou=p=>{
@@ -436,16 +434,16 @@ function pedirGps(automatico){
   };
   const falhou=err=>{
     const code=err&&err.code;
-    if(est.gal.aqui){est.gal.aqui=false;mostraRes('O GPS não respondeu 😕 Digita o endereço e toca em <b>Buscar no mapa</b>.','alerta');}
+    if(est.gal.aqui){est.gal.aqui=false;mostraRes('O GPS não respondeu. Digite o endereço e toque em <b>Buscar no mapa</b>.','alerta');}
     diagErro=code===1?'1 (bloqueado)':code===2?'2 (sem sinal)':code===3?'3 (tempo)':'?';diag('falhou');
     if(!window.isSecureContext){
-      atualizaEndereco('Nesta versão de teste o GPS fica de fora (ele só liga quando o app estiver publicado na internet). Toca no mapa e arrasta o pino, funciona igualzinho 😉');
+      atualizaEndereco('Nesta versão local o GPS não funciona (ele só liga com o app publicado na internet). Toque no mapa e arraste o pino para marcar o local.');
     }else if(code===1){
-      atualizaEndereco('Seu celular bloqueou a localização para este site 😕 Toca no cadeado (ou no ícone de ajustes) ao lado do endereço, entra em Permissões e libera a Localização. Ou toca no mapa para marcar o lugar.');
+      atualizaEndereco('Seu celular bloqueou a localização para este site. Toque no cadeado (ou no ícone de ajustes) ao lado do endereço do site, entre em Permissões e libere a Localização. Ou toque no mapa para marcar o local.');
     }else if(code===2){
-      atualizaEndereco('Não achamos sinal de GPS 📡 Confere se a localização do celular está ligada, ou toca no mapa para marcar o lugar.');
+      atualizaEndereco('Não encontramos sinal de GPS. Confira se a localização do celular está ligada ou toque no mapa para marcar o local.');
     }else{
-      atualizaEndereco('O GPS demorou para responder. Tenta de novo em "Usar minha localização", ou toca no mapa para marcar o lugar.');
+      atualizaEndereco('O GPS demorou para responder. Tente de novo em "Usar minha localização" ou toque no mapa para marcar o local.');
     }
   };
   // 1ª tentativa: alta precisão. Se demorar ou não achar sinal, 2ª tentativa mais tolerante (rede/wi-fi, aceita posição recente)
@@ -460,7 +458,7 @@ function pedirGps(automatico){
 function verFoto(url,origem){
   const v=document.getElementById('visor');
   v.querySelector('img').src=url;
-  v.querySelector('.dica').textContent=origem==='galeria'?'Foto da galeria: o carimbo com o local informado entra quando você toca em Continuar':'A data, a hora e a posição ficam gravadas na parte de baixo da foto';
+  v.querySelector('.dica').textContent=origem==='galeria'?'Foto da galeria: o carimbo com o local informado é aplicado quando você tocar em Continuar':'A data, a hora e a posição ficam gravadas na parte de baixo da foto';
   v.classList.remove('oculta');
 }
 function abrirCamera(slot){
@@ -511,7 +509,7 @@ document.getElementById('cam').addEventListener('change',e=>{
     est.fotos[slotFoto]={url,quando:agora,origem:'camera'};
     document.getElementById('erro2').style.display='none';document.getElementById('erroFoto').style.display='none';
     const slotEl=document.getElementById('slot'+slotFoto);
-    slotEl.innerHTML='<img src="'+url+'" alt="foto do vazamento"><span class="selo">🕒 com data e hora</span><button class="rm" onclick="event.stopPropagation();removeFoto('+slotFoto+')">✕</button>';
+    slotEl.innerHTML='<img src="'+url+'" alt="foto da ocorrência"><span class="selo">🕒 com data e hora</span><button class="rm" onclick="event.stopPropagation();removeFoto('+slotFoto+')">✕</button>';
     URL.revokeObjectURL(img.src);
     est.ocupadoAte=0;
   };
@@ -522,7 +520,7 @@ document.querySelectorAll('.foto-slot').forEach(el=>el.addEventListener('keydown
 function removeFoto(slot){
   est.fotos[slot]=null;
   const s=document.getElementById('slot'+slot);
-  s.innerHTML='<span class="cam">📷</span><span>'+(slot===0?'Tirar a foto':'Mais uma foto<br>(se quiser)')+'</span>';
+  s.innerHTML='<span class="cam">📷</span><span>'+(slot===0?'Tirar a foto':'Mais uma foto<br>(opcional)')+'</span>';
   atualizaModoGaleria();
 }
 /* v2.5: foto da galeria. O local é INFORMADO pela pessoa (rua, número, cidade, referência) e confirmado no mapa. */
@@ -566,7 +564,7 @@ function atualizaModoGaleria(){
   document.getElementById('erro2loc').style.display='none';
   if(on){
     est.geoSeq++;est.refinando=false;clearTimeout(geoTimer);
-    atualizaEndereco('Digita o endereço acima e toca em <b>Buscar no mapa</b> 🔎');
+    atualizaEndereco('Digite o endereço acima e toque em <b>Buscar no mapa</b>.');
     rolaAte('blocoLocal','start');
   }else if(est.gpsLat!=null){
     pino.setLatLng([est.gpsLat,est.gpsLon]);mapa.setView([est.gpsLat,est.gpsLon],18);fixaLocal(est.gpsLat,est.gpsLon,false);
@@ -580,14 +578,14 @@ function atualizaModoGaleria(){
 /* galeria: até 2 fotos, lê data (e GPS, se vier) sem nunca travar */
 function abrirGaleria(){
   const e=document.getElementById('erroFoto');e.style.display='none';
-  if(est.fotos[0]&&est.fotos[1]){e.textContent='Já tem 2 fotos 📷 Toca no ✕ de uma delas para trocar.';e.style.display='block';return;}
+  if(est.fotos[0]&&est.fotos[1]){e.textContent='Já há 2 fotos. Toque no ✕ de uma delas para trocar.';e.style.display='block';return;}
   if(Date.now()<est.ocupadoAte){avisoOcupado();return;}
   document.getElementById('gal').click();
 }
-function avisoOcupado(){const e=document.getElementById('erroFoto');e.textContent='Só um instante, ainda estamos carregando a foto anterior ⏳';e.style.display='block';}
+function avisoOcupado(){const e=document.getElementById('erroFoto');e.textContent='⏳ Aguarde um instante: a foto anterior ainda está carregando.';e.style.display='block';}
 function fotoIlegivel(){
   const e=document.getElementById('erroFoto');
-  e.textContent='Não conseguimos abrir essa foto 😕 Alguns formatos (como HEIC) não abrem no navegador. Tenta outra foto, ou tira um print dela e escolhe o print.';
+  e.textContent='Não foi possível abrir esta foto. Alguns formatos (como HEIC) não abrem no navegador. Tente outra foto ou tire um print dela e escolha o print.';
   e.style.display='block';
 }
 function abreImagem(src){
@@ -605,7 +603,7 @@ document.getElementById('gal').addEventListener('change',async e=>{
   const livres=[0,1].filter(i=>!est.fotos[i]);
   est.ocupadoAte=Date.now()+15000;
   try{for(let k=0;k<Math.min(arqs.length,livres.length);k++)await recebeGaleria(arqs[k],livres[k]);}finally{est.ocupadoAte=0;}
-  if(arqs.length>livres.length&&erro.style.display!=='block'){erro.textContent='Só cabem 2 fotos, ficamos com '+(livres.length===1?'a primeira':'as 2 primeiras')+' 😉';erro.style.display='block';}
+  if(arqs.length>livres.length&&erro.style.display!=='block'){erro.textContent='O limite é de 2 fotos. Mantivemos '+(livres.length===1?'a primeira':'as 2 primeiras')+'.';erro.style.display='block';}
 });
 async function recebeGaleria(f,slot){
   let meta={data:null,tipoData:null,lat:null,lon:null};
@@ -668,19 +666,19 @@ function propoeFotoGps(lat,lon){
   fixaLocal(lat,lon,true);
   est.gal.cand={lat,lon,fonte:'foto'};est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;est.gal.sugestoes=null;
   atualizaForaAviso();
-  mostraRes('📷 A foto trouxe a localização de onde foi tirada. <b>O problema é neste ponto?</b> Confere no mapa.'+botoesConfirma());
+  mostraRes('📷 A foto trouxe a localização de onde foi tirada. <b>A ocorrência é neste ponto?</b> Confira no mapa.'+botoesConfirma());
   rolaAte('mapa','start');
 }
 function estouNoLocal(){
   est.gal.aqui=true;
-  mostraRes('Ligando o GPS… pode levar alguns segundos 📡');
+  mostraRes('Ligando o GPS. Aguarde alguns segundos…');
   pedirGps(false);
 }
 function gpsNaGaleria(lat,lon){
   cancelaPendentes();
   est.gal.cand={lat,lon,fonte:'gps'};est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;est.gal.sugestoes=null;
   atualizaForaAviso();
-  mostraRes('📍 Achamos você aqui. <b>O problema é neste ponto?</b> Confere no mapa.'+botoesConfirma());
+  mostraRes('📍 Você está aqui. <b>A ocorrência é neste ponto?</b> Confira no mapa.'+botoesConfirma());
   rolaAte('mapa','start');
 }
 function pinoManualGaleria(){
@@ -688,7 +686,7 @@ function pinoManualGaleria(){
   cancelaPendentes();
   est.gal.cand={lat:est.lat,lon:est.lon,fonte:'pino'};est.gal.conf=null;est.gal.naoAchou=false;est.gal.opcoes=null;est.gal.sugestoes=null;
   atualizaForaAviso();
-  mostraRes('📍 Você marcou este ponto no mapa. <b>O problema é aqui?</b>'+botoesConfirma());
+  mostraRes('📍 Você marcou este ponto no mapa. <b>A ocorrência é aqui?</b>'+botoesConfirma());
 }
 function textoCand(c){return [c.rua+(c.num!=null?', '+c.num:''),c.bairro,c.cidade].filter(Boolean).join(', ');}
 function propoe(c){
@@ -700,7 +698,7 @@ function propoe(c){
   est.un=unidadeDoPonto(c.lat,c.lon);est.polo=poloDoPonto(c.lat,c.lon);est.foraConfirmado=false;est.longeConfirmado=false;
   est.endereco=textoCand(c);est.bairroFonte='informado';
   atualizaEndereco();atualizaForaAviso();
-  mostraRes('Achamos: <b>'+esc(textoCand(c))+'</b>'+(c.dica?'<div class="loc-aviso">⚠️ '+esc(c.dica)+'</div>':'')+'<div><b>O problema é aqui?</b> Confere no mapa acima.</div>'+botoesConfirma());
+  mostraRes('Encontramos: <b>'+esc(textoCand(c))+'</b>'+(c.dica?'<div class="loc-aviso">⚠️ '+esc(c.dica)+'</div>':'')+'<div><b>A ocorrência é aqui?</b> Confira no mapa acima.</div>'+botoesConfirma());
   rolaAte('mapa','start');
 }
 function confirmaLocal(){
@@ -709,19 +707,19 @@ function confirmaLocal(){
   est.gal.conf=c;est.gal.cand=null;est.gal.naoAchou=false;est.gal.opcoes=null;est.gal.sugestoes=null;
   document.getElementById('erro2loc').style.display='none';
   const t=c.rua?textoCand(c):(!est.refinando&&est.endereco?est.endereco:'o ponto marcado no mapa');
-  mostraRes('✅ <b>Local confirmado:</b> '+esc(t)+(est.polo?'<br>Este aviso aciona o <b>Polo '+esc(est.polo.nome)+'</b>':'')+'<div class="ajuda" style="font-size:14px">Se precisar ajustar, toca no mapa ou arrasta o pino.</div>','ok');
+  mostraRes('✅ <b>Local confirmado:</b> '+esc(t)+(est.polo?'<br>Este aviso aciona o <b>Polo '+esc(est.polo.nome)+'</b>':'')+'<div class="ajuda" style="font-size:14px">Se precisar ajustar, toque no mapa ou arraste o pino.</div>','ok');
   atualizaForaAviso();atualizaEndereco();
 }
 function naoEAqui(){
   cancelaPendentes();
   est.gal.cand=null;est.gal.conf=null;est.gal.naoAchou=true;est.gal.opcoes=null;est.gal.sugestoes=null;
-  mostraRes('Sem problema 😉 Você pode <b>tocar no mapa bem perto do lugar</b> (dá para aproximar com dois dedos), ou conferir o nome da rua e buscar de novo.<br>Se preferir, pode <b>continuar assim mesmo</b>: o endereço e a referência vão junto e a equipe confere o Polo.','alerta');
+  mostraRes('Tudo bem. Você pode <b>tocar no mapa perto do local</b> (use dois dedos para aproximar) ou conferir o nome da rua e buscar de novo.<br>Se preferir, <b>continue assim mesmo</b>: o endereço e a referência seguem no aviso e a equipe confere o Polo.','alerta');
   atualizaForaAviso();
 }
 function naoAchado(erro){
   cancelaPendentes();
   est.gal.cand=null;est.gal.conf=null;est.gal.naoAchou=true;est.gal.opcoes=null;est.gal.sugestoes=null;
-  mostraRes((erro?'<b>O mapa não respondeu agora</b> 📡':'<b>Não achamos essa rua no mapa</b> 😕')+'<br>Confere o nome e busca de novo, ou <b>toca no mapa perto do lugar</b>.<br>Se preferir, pode <b>continuar assim mesmo</b>: o endereço e a referência vão junto e a equipe confere o Polo.','alerta');
+  mostraRes((erro?'<b>O mapa não respondeu agora</b>':'<b>Não encontramos essa rua no mapa</b>')+'<br>Confira o nome e busque de novo ou <b>toque no mapa perto do local</b>.<br>Se preferir, <b>continue assim mesmo</b>: o endereço e a referência seguem no aviso e a equipe confere o Polo.','alerta');
   atualizaForaAviso();
 }
 function escolheOpcao(i){const o=est.gal.opcoes&&est.gal.opcoes[i];if(o)propoe(o);}
@@ -835,7 +833,7 @@ function avisosGrupo(g,num,localizado){
   const audit=[];let dica='';
   if(!localizado&&extensao(g)>1500){
     audit.push(num!=null?'rua longa: o número não foi localizado no mapa, ponto aproximado':'rua longa sem número informado: ponto aproximado');
-    dica='A rua é comprida e o mapa não mostra o número: o pino ficou num ponto aproximado. Se souber o lugar exato, toca no mapa 😉';
+    dica='A rua é longa e o mapa não mostra o número: o pino ficou em um ponto aproximado. Se souber o local exato, toque no mapa.';
   }
   const ps=polosDe(g);
   if(ps.length>1)audit.push('a rua passa por mais de uma área ('+ps.join(' / ')+'): conferir o Polo');
@@ -863,7 +861,7 @@ async function localizaEndereco(txt,cidade){
   if(!its.length){
     if(bairroCo){
       const pb=await centroBairro(bairroCo,cidade);
-      if(pb)return {...base,cand:mkCand(pb.lat,pb.lon,'bairro',bairroCo,{audit:['a rua não aparece no mapa: ponto no bairro '+bairroCo+' (aproximado)'],dica:'Essa rua ainda não aparece no mapa: o pino ficou no bairro '+bairroCo+'. Se souber o lugar exato, toca no mapa 😉'},base)};
+      if(pb)return {...base,cand:mkCand(pb.lat,pb.lon,'bairro',bairroCo,{audit:['a rua não aparece no mapa: ponto no bairro '+bairroCo+' (aproximado)'],dica:'Essa rua ainda não aparece no mapa: o pino ficou no bairro '+bairroCo+'. Se souber o local exato, toque no mapa.'},base)};
     }
     const sug=await sugereRuas(rua,cidade);
     if(sug.length)return {...base,sugestoes:sug};
@@ -891,14 +889,14 @@ async function buscarEndereco(){
   if(document.getElementById('btnBuscar').disabled)return;
   const txt=document.getElementById('locRua').value,cidade=document.getElementById('locCidade').value;
   const {rua,num}=separaNumero(txt);
-  if(letras(rua)<3){mostraRes('Digita o <b>nome da rua</b> e o número, ex.: Rua Maria Carlota, 250 😉','alerta');document.getElementById('locRua').focus();return;}
+  if(letras(rua)<3){mostraRes('Digite o <b>nome da rua</b> e o número. Ex.: Rua Maria Carlota, 250','alerta');document.getElementById('locRua').focus();return;}
   return executaBusca(txt,cidade,'');
 }
 async function executaBusca(txt,cidade,digitado){
   const {rua,num}=separaNumero(txt);
   limpaGaleria();est.gal.buscou=true;
   const seq=est.gal.seq,btn=document.getElementById('btnBuscar');
-  btn.disabled=true;btn.textContent='Procurando no mapa… 🔎';
+  btn.disabled=true;btn.textContent='Procurando no mapa…';
   mostraRes('Procurando <b>'+esc(rua+(num!=null?', '+num:''))+'</b> em '+esc(cidade)+'…');
   rolaAte('locRes');
   let r;
@@ -911,11 +909,11 @@ async function executaBusca(txt,cidade,digitado){
   }
   if(r.sugestoes){
     est.gal.sugestoes=r.sugestoes;
-    mostraRes('Não achamos <b>'+esc(r.rua)+'</b> em '+esc(r.cidade)+'. <b>Você quis dizer:</b>'+r.sugestoes.map((s,i)=>'<button class="loc-opcao" type="button" onclick="escolheSugestao('+i+')">📍 '+esc(s.nome)+' · <b>'+esc(s.bairro||'bairro não informado')+'</b></button>').join('')+'<button class="loc-opcao" type="button" onclick="naoEAqui()">Não é nenhuma dessas</button>','alerta');
+    mostraRes('Não encontramos <b>'+esc(r.rua)+'</b> em '+esc(r.cidade)+'. <b>Você quis dizer:</b>'+r.sugestoes.map((s,i)=>'<button class="loc-opcao" type="button" onclick="escolheSugestao('+i+')">📍 '+esc(s.nome)+' · <b>'+esc(s.bairro||'bairro não informado')+'</b></button>').join('')+'<button class="loc-opcao" type="button" onclick="naoEAqui()">Não é nenhuma dessas</button>','alerta');
   }else if(r.opcoes){
     est.gal.opcoes=r.opcoes;
     const rot=r.opcoes.map(o=>o.bairro||'bairro não informado');
-    mostraRes('Achamos mais de uma <b>'+esc(r.rua)+'</b> em '+esc(r.cidade)+'. <b>Qual delas?</b>'+r.opcoes.map((o,i)=>'<button class="loc-opcao" type="button" onclick="escolheOpcao('+i+')">📍 '+esc(o.rua)+' · <b>'+esc(rot[i])+(rot.indexOf(rot[i])!==rot.lastIndexOf(rot[i])?' ('+(i+1)+')':'')+'</b></button>').join('')+'<button class="loc-opcao" type="button" onclick="naoEAqui()">Não é nenhuma dessas</button>');
+    mostraRes('Encontramos mais de um endereço com o nome <b>'+esc(r.rua)+'</b> em '+esc(r.cidade)+'. <b>Qual deles?</b>'+r.opcoes.map((o,i)=>'<button class="loc-opcao" type="button" onclick="escolheOpcao('+i+')">📍 '+esc(o.rua)+' · <b>'+esc(rot[i])+(rot.indexOf(rot[i])!==rot.lastIndexOf(rot[i])?' ('+(i+1)+')':'')+'</b></button>').join('')+'<button class="loc-opcao" type="button" onclick="naoEAqui()">Não é nenhuma dessas</button>');
   }else if(r.cand)propoe(r.cand);
   else naoAchado(!!r.erro);
 }
@@ -929,17 +927,17 @@ document.getElementById('locRua').addEventListener('keydown',e=>{if(e.key==='Ent
   const c=est.gal.conf||est.gal.cand;
   if(!est.gal.buscou||(c&&['gps','pino','foto'].includes(c.fonte)))return;
   limpaGaleria();
-  mostraRes('Endereço alterado: toca em <b>Buscar no mapa</b> de novo 🔎','alerta');
+  mostraRes('Endereço alterado: toque em <b>Buscar no mapa</b> de novo.','alerta');
 })));
 function validaLocalGaleria(){
   const ref=document.getElementById('locRef').value.trim(),rua=document.getElementById('locRua').value.trim();
-  const semRef='Falta o <b>ponto de referência</b> 📍 Ex.: em frente ao Posto BR. Ajuda muito a equipe a chegar.';
+  const semRef='Falta o <b>ponto de referência</b>. Ex.: em frente ao Posto BR. Isso ajuda muito a equipe a chegar ao local.';
   if(est.gal.conf)return letras(ref)<5?semRef:'';
-  if(est.gal.cand)return 'Confirma o local no mapa: toca em <b>✅ Sim, é aqui</b> 😉';
-  if(est.gal.opcoes)return 'Escolhe qual das ruas é a certa, logo abaixo do mapa 😉';
-  if(est.gal.sugestoes)return 'Escolhe uma das sugestões de rua, ou toca em <b>Não é nenhuma dessas</b> 😉';
-  if(est.gal.naoAchou){if(letras(rua)<3)return 'Digita a rua e o número do local, ex.: Rua Maria Carlota, 250.';return letras(ref)<5?semRef:'';}
-  return 'Conta onde foi 📍 Digita a rua e o número e toca em <b>Buscar no mapa</b> (ou em <b>Estou no local agora</b>).';
+  if(est.gal.cand)return 'Confirme o local no mapa: toque em <b>✅ Sim, é aqui</b>.';
+  if(est.gal.opcoes)return 'Escolha a rua certa, logo abaixo do mapa.';
+  if(est.gal.sugestoes)return 'Escolha uma das sugestões de rua ou toque em <b>Não é nenhuma dessas</b>.';
+  if(est.gal.naoAchou){if(letras(rua)<3)return 'Digite a rua e o número do local. Ex.: Rua Maria Carlota, 250.';return letras(ref)<5?semRef:'';}
+  return 'Informe o local: digite a rua e o número e toque em <b>Buscar no mapa</b> (ou em <b>Estou no local agora</b>).';
 }
 function localInformado(){
   const cid=document.getElementById('locCidade').value,{rua,num}=separaNumero(document.getElementById('locRua').value),c=est.gal.conf;
@@ -1043,7 +1041,7 @@ function localCamera(){
   const r=ruaDoPino();
   return r&&base.startsWith(r+', ')?r+', próximo ao nº '+n+base.slice(r.length):base+' (próximo ao nº '+n+')';
 }
-function avisoNum(on){const a=document.getElementById('numAjuda');a.classList.toggle('alerta',on);a.textContent=on?'Mudou a rua no mapa: confere o número e digita de novo 😉':'Olha a fachada da casa ou do comércio em frente. Ajuda a equipe a chegar direto.';}
+function avisoNum(on){const a=document.getElementById('numAjuda');a.classList.toggle('alerta',on);a.textContent=on?'O pino agora está em outra rua. Confira o número e digite de novo.':'Veja o número na fachada da casa ou do comércio em frente. Isso ajuda a equipe a chegar direto ao local.';}
 function digitouNumero(){est.numRua=ruaDoPino()||null;avisoNum(false);}
 function checaNumRua(){
   const el=document.getElementById('numRef');
@@ -1065,8 +1063,8 @@ function atualizaForaAviso(){
   if(a){
     const d=(!g&&est.gpsLat!=null)?distanciaM(est.gpsLat,est.gpsLon,est.lat,est.lon):null;
     const longe=d!=null&&d>300, rua=!g&&ruaTrocada();
-    if(longe)a.querySelector('span').textContent='O pino está a '+fmtDist(d)+' de onde você está. Confere se é o ponto certo da ocorrência.';
-    else if(rua)a.querySelector('span').textContent='O pino foi para a '+ruaDoPino()+', mas você está na '+est.ruaGps+'. Confere se é o ponto certo da ocorrência.';
+    if(longe)a.querySelector('span').textContent='O pino está a '+fmtDist(d)+' de onde você está. Confira se é o ponto certo da ocorrência.';
+    else if(rua)a.querySelector('span').textContent='O pino foi para a '+ruaDoPino()+', mas você está na '+est.ruaGps+'. Confira se é o ponto certo da ocorrência.';
     mostraAviso(a,longe||rua,'flex');
   }
 }
@@ -1077,24 +1075,24 @@ function distanciaM(lat1,lon1,lat2,lon2){
 }
 function atualizaDestino(){
   const d=document.getElementById('destinoPolo');
-  if(aConfirmar()){d.classList.add('fora');d.innerHTML='🧭 <span>Não achamos o endereço no mapa. O aviso segue com o endereço e a referência, e a equipe confere o Polo, tá bom?</span>';return;}
+  if(aConfirmar()){d.classList.add('fora');d.innerHTML='🧭 <span>Não encontramos o endereço no mapa. O aviso segue com o endereço e a referência, e a equipe confere o Polo.</span>';return;}
   if(est.polo){d.classList.remove('fora');d.innerHTML='📬 <span>Este aviso aciona: <b>Polo '+esc(est.polo.nome)+'</b></span>';}
-  else{d.classList.add('fora');d.innerHTML='🧭 <span>Ponto fora da área atendida (UN Leste). O aviso vai para a central, que confere o local, tá bom?</span>';}
+  else{d.classList.add('fora');d.innerHTML='🧭 <span>Ponto fora da área atendida (UN Leste). O aviso vai para a central, que confere o local.</span>';}
 }
 function validaRegistro(nome,fone,unidade){
   const palavras=nome.split(/\s+/).filter(p=>p.replace(/[^A-Za-zÀ-ÿ]/g,'').length>=2);
-  if(palavras.length<2)return {msg:'Coloca o seu nome e sobrenome, tá bom?'};
+  if(palavras.length<2)return {msg:'Informe nome e sobrenome.'};
   let d=fone.replace(/\D/g,'');
   if((d.length===12||d.length===13)&&d.startsWith('55'))d=d.slice(2);
-  if(d.length!==10&&d.length!==11)return {msg:'O telefone precisa ter DDD e número, ex.: (11) 98765-4321.'};
-  if(d[0]==='0'||d[1]==='0')return {msg:'O DDD parece inválido, confere os números?'};
+  if(d.length!==10&&d.length!==11)return {msg:'O telefone precisa ter DDD e número. Ex.: (11) 98765-4321.'};
+  if(d[0]==='0'||d[1]==='0')return {msg:'O DDD parece inválido. Confira os números.'};
   const num=d.slice(2);
-  if(d.length===11&&num[0]!=='9')return {msg:'Celular com 11 dígitos começa com 9 depois do DDD, confere?'};
-  if(/^(\d)\1+$/.test(num))return {msg:'Esse telefone não parece real, confere os números?'};
+  if(d.length===11&&num[0]!=='9')return {msg:'Celular com 11 dígitos começa com 9 depois do DDD. Confira o número.'};
+  if(/^(\d)\1+$/.test(num))return {msg:'Este telefone não parece válido. Confira os números.'};
   const sigla=unidade.toUpperCase().replace(/\s+/g,'');
   const letras=sigla.replace(/[^A-Z]/g,'');
-  if(!/^[A-Z-]+$/.test(sigla)||letras.length<2||letras.length>5)return {msg:'Na unidade, usa a sigla com até 5 letras, ex.: GACE ou OLMS 😉'};
-  if(['POLO','UN','TESTE'].includes(letras))return {msg:'Coloca a sigla da sua unidade (ex.: GACE, OLMS), não um nome genérico.'};
+  if(!/^[A-Z-]+$/.test(sigla)||letras.length<2||letras.length>5)return {msg:'Na unidade, use a sigla com até 5 letras. Ex.: GACE ou OLMS.'};
+  if(['POLO','UN','TESTE'].includes(letras))return {msg:'Informe a sigla da sua unidade (ex.: GACE, OLMS), não um nome genérico.'};
   return {unidade:sigla};
 }
 function salvaRegistro(nome,fone,unidade){
@@ -1122,7 +1120,7 @@ async function enviar(){
   const semMapa=aConfirmar();
   if(!est.polo&&!semMapa&&!est.foraConfirmado){
     est.foraConfirmado=true;
-    erro3.textContent='Este ponto está fora da área coberta pelo app (UN Leste) 🧭 Confere o pino no mapa. Se o local estiver certo mesmo, toca em Enviar de novo que a gente registra assim.';
+    erro3.textContent='Este ponto está fora da área atendida (UN Leste). Volte e confira o pino no mapa. Se o local estiver certo, toque novamente em "Enviar aviso" para registrar assim.';
     erro3.style.display='block';
     return;
   }
@@ -1130,7 +1128,7 @@ async function enviar(){
     const dL=distanciaM(est.gpsLat,est.gpsLon,est.lat,est.lon);
     if(dL>2000){
       est.longeConfirmado=true;
-      erro3.textContent='O pino está a '+fmtDist(dL)+' da sua posição 📏 Se o local da ocorrência estiver certo mesmo, toca em Enviar de novo.';
+      erro3.textContent='O pino está a '+fmtDist(dL)+' da sua posição. Se o local da ocorrência estiver certo, toque novamente em "Enviar aviso".';
       erro3.style.display='block';
       return;
     }
@@ -1140,10 +1138,10 @@ async function enviar(){
   if(!est.protoAtual)est.protoAtual='VAZ-'+agora.getFullYear()+'-'+String(Math.floor(100000+Math.random()*899999));
   const proto=est.protoAtual;
   const btn=document.getElementById('btnEnviar');
-  btn.disabled=true;btn.textContent='Enviando… 📡';
+  btn.disabled=true;btn.textContent='Enviando…';
   for(let i=0;i<20&&est.refinando;i++)await esperaMs(200);
   if(est.gal.ativo&&validaLocalGaleria()){
-    btn.disabled=false;btn.textContent='Enviar meu aviso 💙';
+    btn.disabled=false;btn.textContent='Enviar aviso';
     irPara3Original(2);
     const el=document.getElementById('erro2loc');el.innerHTML=validaLocalGaleria();el.style.display='block';
     return;
@@ -1194,12 +1192,12 @@ async function enviar(){
     clearTimeout(tempo);
     if(!r.ok)throw new Error('HTTP '+r.status);
   }catch(e){
-    btn.disabled=false;btn.textContent='Tentar enviar de novo 📡';
-    erro3.textContent='Não conseguimos enviar agora 😕 Confere a internet e toca de novo, que o aviso está guardadinho aqui.';
+    btn.disabled=false;btn.textContent='Tentar enviar novamente';
+    erro3.textContent='Não foi possível enviar agora. Confira a conexão com a internet e toque em "Tentar enviar novamente". Os dados continuam preenchidos.';
     erro3.style.display='block';
     return;
   }
-  btn.disabled=false;btn.textContent='Enviar meu aviso 💙';
+  btn.disabled=false;btn.textContent='Enviar aviso';
   document.getElementById('protoTxt').textContent=proto;
   const fotos=est.fotos.filter(Boolean).length,nGal=est.fotos.filter(f=>f&&f.origem==='galeria').length;
   const linhas=[
@@ -1213,10 +1211,10 @@ async function enviar(){
   ];
   document.getElementById('reciboDet').innerHTML=linhas.map(l=>'<div><span>'+l[0]+'</span><b>'+esc(l[1])+'</b></div>').join('');
   document.getElementById('reciboMsg').textContent=semMapa
-    ?'Aviso enviado! A equipe confere o endereço e aciona o Polo. Guarde o número do protocolo:'
+    ?'A equipe vai conferir o endereço e acionar o Polo. Guarde o número do protocolo:'
     :est.polo
-    ?'O polo responsável acabou de receber por e-mail. Guarde o número do protocolo:'
-    :'Aviso enviado à central para conferência do local. Guarde o número do protocolo:';
+    ?'O Polo responsável já recebeu o aviso por e-mail. Guarde o número do protocolo:'
+    :'A central vai conferir o local. Guarde o número do protocolo:';
   irPara3Original(4);
 }
 function reiniciar(){
@@ -1234,7 +1232,7 @@ function reiniciar(){
   document.getElementById('avisoDist').style.display='none';
   est.lat=-23.55;est.lon=-46.63;
   pino.setLatLng([est.lat,est.lon]);mapa.setView([est.lat,est.lon],17);
-  atualizaEndereco('Estamos te procurando no mapa…');
+  atualizaEndereco('Localizando você no mapa…');
   document.querySelectorAll('.cartaozao').forEach(c=>c.classList.remove('sel'));
   irPara3Original(1);
 }
