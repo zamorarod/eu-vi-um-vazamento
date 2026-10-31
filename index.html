@@ -93,6 +93,7 @@
   .bloco-local{background:#FFF7EA;border:1.5px solid #E7B566;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:13px}
   .bloco-local h3{margin:0;font:800 20px/1.2 var(--display);color:#8A4B06}
   .bloco-local .ajuda{font-size:14.5px}
+  #numAjuda{font-size:14px;margin-top:6px}#numAjuda.alerta{color:#8a4b06;font-weight:600}
   .loc-res{background:var(--branco);border:1.5px solid var(--acento);border-radius:14px;padding:14px 15px;font-size:15.5px;line-height:1.5;color:var(--ink)}
   .loc-res div,.loc-res button{margin-top:10px}
   .loc-res.ok{border-color:#9FD0AA;background:#EEF8F0}
@@ -174,6 +175,11 @@
   <div class="erro-msg" id="foraPiloto">🧭 Este ponto está fora da área atendida (UN Leste). Confere se o pino está no lugar certo.</div>
   <div class="destino fora" id="avisoDist" style="display:none">📏 <span></span></div>
   <div id="diag" style="display:none;font-size:11.5px;color:var(--sutil);margin-top:-8px;padding-left:4px"></div>
+  <div id="blocoNum">
+    <label for="numRef">Número mais próximo <span style="font-weight:400;color:var(--sutil)">(se der para ver)</span></label>
+    <input type="text" id="numRef" inputmode="numeric" maxlength="12" placeholder="Ex.: 250" autocomplete="off" style="max-width:150px" oninput="digitouNumero()">
+    <p class="ajuda" id="numAjuda">Olha a fachada da casa ou do comércio em frente. Ajuda a equipe a chegar direto.</p>
+  </div>
   <div>
     <label for="obs">Quer contar mais alguma coisa? <span style="font-weight:400;color:var(--sutil)">(se quiser)</span></label>
     <textarea id="obs" rows="2" placeholder="Ex.: está assim desde ontem, bem em frente à padaria"></textarea>
@@ -219,7 +225,7 @@
     <button class="btn" onclick="reiniciar()">Registrar outra ocorrência</button>
   </div>
 </main>
-<footer>Eu vi um Vazamento · uso interno Sabesp<br>versão 2.7 · 31/10/2026</footer>
+<footer>Eu vi um Vazamento · uso interno Sabesp<br>versão 2.8 · 31/10/2026</footer>
 <div id="visor" class="oculta" onclick="this.classList.add('oculta')">
   <img alt="foto ampliada">
   <div class="dica">A data, a hora e a posição ficam gravadas na parte de baixo da foto</div>
@@ -376,6 +382,7 @@ function atualizaEndereco(msg){
   const chips=!est.gal.ativo||!!(est.gal.cand||est.gal.conf);
   const un=!chips?'':(est.polo?' <span class="chip-un">Polo '+est.polo.nome+'</span>':'')+(est.un?' <span class="chip-un">região '+est.un.nome+'</span>':'');
   document.getElementById('endTxt').innerHTML=(msg?msg:(est.endereco?'<b>'+esc(est.endereco)+'</b>':'Arraste o pino até o ponto do vazamento'))+un;
+  if(!msg)checaNumRua();
 }
 async function geoReversa(lat,lon){
   try{
@@ -551,6 +558,7 @@ function atualizaModoGaleria(){
   const on=modoGaleria(),era=est.gal.ativo;
   est.gal.ativo=on;
   document.getElementById('blocoLocal').classList.toggle('oculta',!on);
+  document.getElementById('blocoNum').classList.toggle('oculta',on);
   document.getElementById('btnGpsMapa').classList.toggle('oculta',on);
   if(on===era)return;
   const confAntes=est.gal.conf;
@@ -1021,6 +1029,30 @@ function mostraAviso(el,liga,display){
   if(liga&&!antes)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'center'}),150);
 }
 function ruaDoPino(){return est.endereco?est.endereco.split(',')[0].trim():'';}
+/* numero mais proximo (modo camera): opcional, nunca trava; fica preso a rua em que foi digitado */
+function numeroRef(){
+  const t=document.getElementById('numRef').value.trim().replace(/(\d)\.(?=\d{3}\b)/g,'$1');
+  const m=/^(?:n[º°o]?\.?\s*)?(\d{1,5})(?:\s*-?\s*([a-z]))?\b/i.exec(t);
+  return m?m[1]+(m[2]?'-'+m[2].toUpperCase():''):'';
+}
+function mesmaRuaDoNumero(r){return !est.numRua||!r||normTxt(r)===normTxt(est.numRua)||mesmoNome(r,est.numRua);}
+function numeroValido(){return mesmaRuaDoNumero(ruaDoPino())?numeroRef():'';}
+function localCamera(){
+  const base=est.endereco||est.lat.toFixed(5)+', '+est.lon.toFixed(5),n=numeroValido();
+  if(!n)return base;
+  const r=ruaDoPino();
+  return r&&base.startsWith(r+', ')?r+', próximo ao nº '+n+base.slice(r.length):base+' (próximo ao nº '+n+')';
+}
+function avisoNum(on){const a=document.getElementById('numAjuda');a.classList.toggle('alerta',on);a.textContent=on?'Mudou a rua no mapa: confere o número e digita de novo 😉':'Olha a fachada da casa ou do comércio em frente. Ajuda a equipe a chegar direto.';}
+function digitouNumero(){est.numRua=ruaDoPino()||null;avisoNum(false);}
+function checaNumRua(){
+  const el=document.getElementById('numRef');
+  if(est.gal.ativo||!el.value.trim())return;
+  const r=ruaDoPino();if(!r)return;
+  if(!est.numRua){est.numRua=r;return;}
+  if(mesmaRuaDoNumero(r))return;
+  el.value='';est.numRua=null;avisoNum(true);
+}
 function ruaTrocada(){
   const rp=ruaDoPino();
   return !!(est.fixManual&&est.ruaGps&&rp&&rp.toLowerCase()!==est.ruaGps.toLowerCase());
@@ -1130,14 +1162,16 @@ async function enviar(){
     }else{
       audit.push('sem sinal de GPS - local marcado manualmente no mapa');
     }
+    const nAud=audit.length,nRef=numeroValido();
+    if(nRef)audit.push('número mais próximo informado pelo usuário: '+nRef);
     if(audit.length)o+='\n[Verificação do app: '+audit.join('; ')+']';
-    if(audit.length&&est.gpsLat!=null)o+='\nGPS do aparelho: https://maps.google.com/?q='+est.gpsLat.toFixed(6)+','+est.gpsLon.toFixed(6);
+    if(nAud&&est.gpsLat!=null)o+='\nGPS do aparelho: https://maps.google.com/?q='+est.gpsLat.toFixed(6)+','+est.gpsLon.toFixed(6);
     return o;
   }
   const pacote={
     protocolo:proto,
     tipo:TIPOS[est.tipo]?TIPOS[est.tipo].email:String(est.tipo),
-    local:est.gal.ativo?localEnvio():(est.endereco||est.lat.toFixed(5)+', '+est.lon.toFixed(5)),
+    local:est.gal.ativo?localEnvio():localCamera(),
     lat:semMapa?CIDADES[document.getElementById('locCidade').value][0]:est.lat,
     lon:semMapa?CIDADES[document.getElementById('locCidade').value][1]:est.lon,
     polo:semMapa?'A CONFIRMAR (endereço não encontrado no mapa)':(est.polo?est.polo.nome:'FORA DA ÁREA DO PILOTO (conferir local)'),
@@ -1189,6 +1223,7 @@ function reiniciar(){
   est.tipo=null;est.fotos=[null,null];est.protoAtual=null;
   removeFoto(0);removeFoto(1);
   document.getElementById('obs').value='';
+  document.getElementById('numRef').value='';est.numRua=null;avisoNum(false);document.getElementById('blocoNum').classList.remove('oculta');
   limpaGaleria();est.gal.ativo=false;
   ['locRua','locRef'].forEach(id=>document.getElementById(id).value='');document.getElementById('locCidade').selectedIndex=0;
   mostraRes('');document.getElementById('blocoLocal').classList.add('oculta');document.getElementById('btnGpsMapa').classList.remove('oculta');
